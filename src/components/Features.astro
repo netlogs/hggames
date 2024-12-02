@@ -1,0 +1,45 @@
+---
+import FeatureCard from './ui/FeatureCard.astro';
+
+const features = [
+  {
+    title: "Custom Tributes",
+    description: "Create unique characters with distinct abilities and attributes to participate in the games.",
+    icon: "user-group"
+  },
+  {
+    title: "Dynamic Events",
+    description: "Experience randomly generated events that create unique storylines every time you play.",
+    icon: "sparkles"
+  },
+  {
+    title: "Survival Strategy",
+    description: "Form alliances, gather resources, and make critical decisions to survive the arena.",
+    icon: "shield-check"
+  },
+  {
+    title: "Narrative Generation",
+    description: "Watch as your tributes' stories unfold through detailed event descriptions and outcomes.",
+    icon: "book-open"
+  }
+];
+---
+
+<section id="features" class="py-24 bg-secondary-light">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">
+        Advanced Simulation Features
+      </h2>
+      <p class="text-white/80 max-w-2xl mx-auto">
+        Our simulator brings the Hunger Games to life with sophisticated features designed to create an immersive and unique experience every time.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {features.map(feature => (
+        <FeatureCard {...feature} />
+      ))}
+    </div>
+  </div>
+</section>

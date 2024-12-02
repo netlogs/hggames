@@ -1,0 +1,39 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-secondary-light py-12">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="col-span-1 md:col-span-2">
+        <h3 class="text-2xl font-display font-bold text-primary mb-4">
+          Hunger Games Simulator
+        </h3>
+        <p class="text-white/80 max-w-md">
+          Experience the thrill of the Hunger Games through our advanced simulator. 
+          Create custom tributes and witness epic survival stories unfold.
+        </p>
+      </div>
+      
+      <div>
+        <h4 class="font-semibold mb-4">Quick Links</h4>
+        <ul class="space-y-2">
+          <li><a href="#features" class="text-white/80 hover:text-primary">Features</a></li>
+          <li><a href="#how-it-works" class="text-white/80 hover:text-primary">How It Works</a></li>
+          <li><a href="#faq" class="text-white/80 hover:text-primary">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-4">Contact</h4>
+        <a href="mailto:colorepistle@gmail.com" class="text-white/80 hover:text-primary">
+          colorepistle@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-white/10 text-center text-white/60">
+      <p>© {currentYear} Cepistle. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

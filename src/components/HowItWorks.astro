@@ -1,0 +1,49 @@
+---
+const steps = [
+  {
+    number: "01",
+    title: "Create Your Tributes",
+    description: "Add between 5 to 24 tributes to your game. Name them, customize their attributes, and prepare them for the arena."
+  },
+  {
+    number: "02",
+    title: "Configure the Arena",
+    description: "Choose arena settings and event probabilities to create your perfect game environment."
+  },
+  {
+    number: "03",
+    title: "Start the Simulation",
+    description: "Watch as events unfold, alliances form, and tributes fight for survival in real-time."
+  },
+  {
+    number: "04",
+    title: "Track the Outcome",
+    description: "Follow detailed event logs and discover who emerges as the ultimate victor of the games."
+  }
+];
+---
+
+<section id="how-it-works" class="py-24">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">
+        How It Works
+      </h2>
+      <p class="text-white/80 max-w-2xl mx-auto">
+        Get started with our simulator in four simple steps. Create your tributes, configure the arena, and witness the games unfold.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {steps.map(step => (
+        <div class="relative">
+          <div class="text-4xl font-display font-bold text-primary/20 mb-4">
+            {step.number}
+          </div>
+          <h3 class="text-xl font-semibold mb-2">{step.title}</h3>
+          <p class="text-white/70">{step.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
