@@ -1,15 +1,15 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { 
+const {
   title,
-  description = "Experience the thrill of the Hunger Games through our advanced simulator. Create custom tributes, simulate battles, and witness epic survival stories unfold."
+  description = "Experience the thrill of the Hunger Games through our advanced simulator. Create custom tributes, simulate battles, and witness epic survival stories unfold.",
 } = Astro.props;
 ---
 
@@ -21,7 +21,10 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <title>{title} | HGgames</title>
   </head>
   <body class="bg-secondary text-white min-h-screen flex flex-col">
@@ -30,6 +33,22 @@ const {
       <slot />
     </main>
     <Footer />
+    <div style="display: none;">
+      <!-- add google tag code here -->
+      <!-- Google tag (gtag.js) -->
+      <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-QNEG8P29EY"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+
+        gtag("config", "G-QNEG8P29EY");
+      </script>
+    </div>
   </body>
 </html>
 
@@ -39,13 +58,13 @@ const {
     --accent-light: 255, 128, 128;
     --accent-dark: 204, 61, 61;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: #1A1A1A;
+    font-family: "Inter", system-ui, sans-serif;
+    background: #1a1a1a;
   }
 </style>
