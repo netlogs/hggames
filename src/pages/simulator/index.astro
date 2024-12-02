@@ -1,13 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import SimulatorApp from '../../components/simulator/SimulatorApp';
+import TributeSetup from '../../components/simulator/TributeSetup';
 ---
 
 <Layout 
   title="Start Simulation"
   description="Create your tributes and start your own Hunger Games simulation. Customize attributes, watch events unfold, and discover who emerges victorious."
 >
-  <div class="container mx-auto px-4 py-24">
-    <SimulatorApp client:load />
+  <div class="min-h-screen pt-20">
+    <TributeSetup client:load />
   </div>
 </Layout>
