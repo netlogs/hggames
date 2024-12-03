@@ -6,12 +6,368 @@ const weapons = [
   "octobrush", "fidget spinner", "assault rifle", "frisbee", "tank"
 ];
 
+const meleeweapon = [
+"sword",
+"knife",
+"golf club",
+"baseball bat",
+"stick",
+"potato",
+"shoe",
+"dead platypus",
+"65",
+"diamond sword",
+"dual swords",
+"TI-Nspire",
+"folding chair",
+"steam controller",
+"pear",
+"war axe",
+"greatsword",
+"Victorian broadsword",
+"shortsword",
+"mace",
+"bottle of vodka"
+]
+
 const itemsToFind = [
-  "fruit tree", "poisonous fruit tree", "clean water", "clean coal",
-  // ... 其他物品
+  "fruit tree",
+"poisonous fruit tree",
+"clean water",
+"clean coal",
+"clean Cole",
+"OCC vending machine",
+"wild Ohio Fried Chicken",
+"glasses that cure color-blindness",
+"bleach gummy bottle",
+"paintball",
+"used Band-Aid",
+"clean water",
+"pack of condoms",
+"tent",
+"biology textbook",
+"bucket of KFC",
+"tin of Donald Trump's bronzer",
+"Emoji Movie on laserdisc",
+"anthology of life-changing poems",
+"quenched and tempered steel",
+"VIP ticket to Tana Mojo concert",
+"unicorn",
+"spiritual enlightenment in a Villanova brochure",
+"Lapras",
+"diamond pickaxe",
+"Stalin mustache",
+"bone-hurting juice",
+"one spaghetti",
+"50% off coupon to an SAT prep class",
+"indescribable object",
+"chocolate-covered cotton",
+"stick of Old Spice deodorant",
+"freeze ray",
+"findings"
 ];
 
+const itemsThatGivePoints = [
+"fruit tree",
+"clean water",
+"glasses that cure color-blindness",
+"anthology of life-changing poems",
+"stick of Old Spice deodorant",
+"50% off coupon to an SAT prep class"
+]
+
+const causeAndEffect =
+["fruit tree",
+"eats fruit and gains one point in strength",
+"poisonous fruit tree",
+"eats a poisonous fruit",
+"clean water",
+"drinks clean water and gains one point in constitution",
+"clean coal",
+"uses coal to cook food",
+"clean Cole",
+"uses clean Cole as food",
+"OCC vending machine",
+"gets a tin of Altoids",
+"wild Ohio Fried Chicken",
+"random chicken",
+"glasses that cure color-blindness",
+"is no longer color-blind",
+"bleach gummy bottle",
+"eats bleach gummy bottle",
+"used Band-Aid",
+"random bandaid",
+"pack of condoms",
+"safe dating",
+"tent",
+"constructs a tent",
+"biology textbook",
+"reads a biology textbook and falls asleep",
+"bucket of KFC",
+"eats KFC",
+"tin of Donald Trump's bronzer",
+"becomes as orange as Donald Trump and dies of chemical poisoning",
+"Emoji Movie on laserdisc",
+"dies of pure cancer after watching the Emoji Movie",
+"anthology of life-changing poems",
+"\'s life gets changed by poetry",
+"quenched and tempered steel",
+"constructs a geometrically stable truss",
+"VIP ticket to Tana Mojo concert",
+"gets assaulted by a toothbrush at Tana Mojo concert",
+"unicorn",
+"pets the pink fluffy unicorn",
+"spiritual enlightenment in a Villanova brochure",
+"sees the light and adheres to the all-boy advantage",
+"Agrawal star",
+"jealousy",
+"diamond pickaxe",
+"mines diamond ore",
+"bone-hurting juice",
+"has major bone pain after drinking bone-hurting juice",
+"Stalin mustache",
+"gulag",
+"one spaghetti",
+"eats a singular spaghetti",
+"50% off coupon to an SAT prep class",
+"attends an SAT class for half the price",
+"indescribable object",
+"object",
+"chocolate-covered cotton",
+"gets indigestion from too much Egyptian cotton",
+"stick of Old Spice deodorant",
+"smells good, but it\'s Old Spice, not your boy\'s cologne",
+"freeze ray",
+"freezes",
+"email",
+"dies of shame after being kicked off the finance team",
+"findings",
+"becomes the most successful paleontologist from Vatican City"];
+
+const killCauseAndEffect =
+["landmine",
+"random mine",
+"bow",
+"shoots",
+"melee",
+"kills",
+"paintball",
+"brings one less paintball, so",
+"basketball",
+"dunks on",
+"octobrush",
+"splats",
+"fidget spinner",
+"spins fidget spinner fatally at",
+"assault rifle",
+"shoots",
+"frisbee",
+"decapitates",
+"tank",
+"murders"];
+
+const shelter =
+["cave",
+"tree",
+"cardboard box",
+"geometrically stable truss",
+"House of the Seven Gables",
+"horse carcass",
+"igloo",
+"Olive Garden",
+"couch",
+"sleeping bag",
+"queen-sized bed with a memory foam mattress and furnished headrest",
+"brothel"];
+
 const cornucopia = ["run", "supply", "weapon", "battle"];
+
+var sponsor =
+["empty box",
+"paintball",
+"used Band-Aid",
+"clean water",
+"pack of condoms",
+"tent",
+"biology textbook",
+"bucket of KFC",
+"tin of Donald Trump's bronzer",
+"Emoji Movie on laserdisc",
+"anthology of life-changing poems",
+"quenched and tempered steel",
+"VIP ticket to Tana Mojo concert",
+"Agrawal star",
+"Lapras",
+"diamond pickaxe",
+"Stalin mustache",
+"bone-hurting juice",
+"one spaghetti",
+"50% off coupon to an SAT prep class",
+"indescribable object",
+"chocolate-covered cotton",
+"stick of Old Spice deodorant",
+"freeze ray"];
+
+var misc =
+["wanders around",
+"picks flowers",
+"heils Hitler",
+"hails Hortler",
+"talks to",
+"drops a rant against",
+"levels up",
+"sings us a song",
+"is the sheriff",
+"plays some pranks (GONE WRONG GONE SEXUAL)",
+"realizes maverick isn't all yellow",
+"loses the game",
+"cries",
+"has nightmares",
+"stabs asparagus",
+"runs out of ammunition",
+"is accused of mansplaining",
+"Disney star takes",
+"gets doxxed by keemstar",
+"hides in a river",
+"hides from",
+"eats",
+"attaches a measuring tape to a toaster",
+"gains Disney Channel flo",
+"sings opera",
+"blames Nelson",
+"becomes a literary artist",
+"complains about a test grade",
+"catches 22",
+"catches in the rye",
+"raises the mission requirement to 65",
+"tries to post a Vine",
+"logs",
+"changes genders",
+"email",
+"yells \"NikhilYA!\"",
+"finds Pepe",
+"finds Chuck Norris",
+"puts chemicals in the water to turn the frogs gay",
+"fights the Ender dragon",
+"watches WatchMojo for 3 hours",
+"joins the Society of Teen Suicide Prevention",
+"finds Bishan Agrawal",
+"barrel rolls",
+"finds Dory",
+"finds Nemo"];
+
+var injury =
+["gets a cold",
+"gets the flu",
+"gets mono",
+"gets strep throat",
+"loses 0.13 GPA points, and is severely injured",
+"is stung by BEES",
+"battles and wounds",
+"sends a mass mail",
+"goes deaf due to Jake Paul",
+"triggered",
+"gets carpal tunnel syndrome from playing osu",
+"gets osteoporosis",
+"gets crippling depression",
+"tries to break the fourth wall",
+"prank calls",
+"sees things twice",
+"sees things once",
+"reads a disheartening message in Comic Sans",
+"slips and slides on a banana peel",
+"gets Hodgkin\'s Lymphoma",
+"gets a bladder infection",
+"gets their fingernails removed by a native tribe",
+"gets devastating hiccups",
+"gets yellow fever",
+"gets forced into BEES",
+"gets roasted by Pannapara. Slam!",
+"unluckily trips despite the 1/100 chance",
+"gets an ulcer",
+"develops stage 4 brain cancer",
+"gets necrosis",
+"gets forced into fall mentorship"];
+
+var injEffect =
+["bow",
+"injures",
+"melee",
+"injures",
+"paintball",
+"gets hit by a paintball shot by",
+"basketball",
+"gets juked by",
+"octobrush",
+"wounds",
+"fidget spinner",
+"spins fidget spinner nonfatally at",
+"assault rifle",
+"shoots and grazes"];
+
+var variousDeaths =
+["strangles",
+"breaks",
+"dies of Ebola",
+"gets crushed by an unstable truss",
+"forgets to get the AED for",
+"gets burned to death from",
+"hangs",
+"decides to take a permanent nap",
+"falls off a cliff while playing Pokemon Go",
+"yells \"woag wiag wiag\" at",
+"gets nuked from orbit by",
+"chokes on crabapples in cheeks",
+"forgets how to breathe",
+"uses dank memes to kill",
+"navy seals",
+"unsafe dating",
+"gets hit by a hurricane",
+"falls through a portal into the blender dimension",
+"loses circulation looking too good in those tight shorts",
+"loses circulation looking too tight in those good shorts",
+"fell into the void",
+"was slain by a zombie pigman",
+"withered away",
+"stream",
+"fatally roundhouse kicks",
+"receives a bad Bishan test and dies",
+"dies after a botched birthmark removal surgery",
+"curses on a Christian server and gets smote",
+"spontaneously combusts",
+"lost connection to the server",
+"coat hanger",
+"falls in a well",
+"dies in the Matrix",
+"succumbs to lethal peer pressure from",
+"accepts the Blue Whale challenge"];
+
+var doubleDeath =
+["strangles",
+"forgets to get the AED for",
+"gets nuked from orbit by",
+"gets memed to death by",
+"uses dank memes to kill",
+"fatally roundhouse kicks",
+"succumbs to lethal peer pressure from"];
+
+var options =
+["weapons",
+"items",
+"use",
+"shelter",
+"use",
+"misc",
+"injury",
+"use",
+"death",
+"heal",
+"items",
+"use",
+"injury",
+"use"];
+
+//var vowels = ["a","e","i","o","u"];
 
 interface Tribute {
   name: string;
@@ -34,6 +390,8 @@ export default function TributeSetup() {
   const [showDeaths, setShowDeaths] = useState(false);
   const [showCornucopia, setShowCornucopia] = useState(false);
   const [showWinner, setShowWinner] = useState(false);
+  const [dayEvents, setDayEvents] = useState<string[]>([]);
+  const [showDayEvents, setShowDayEvents] = useState(false);
 
   const handleTributeCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -177,7 +535,7 @@ export default function TributeSetup() {
         tribute.events.push(`Day ${dayCounter}: Died in the bloodbath`);
       } else {
         const itemSummary = tribute.items.length > 0 ? 
-          `Obtained: ${tribute.items.join(", ")}` : 
+          tribute.items.map(item => `grabs ${item} from Cornucopia`).join(", ") : 
           "Obtained no items";
         tribute.events.push(`Day ${dayCounter}: Survived the bloodbath. ${itemSummary}`);
       }
@@ -190,11 +548,14 @@ export default function TributeSetup() {
   const toDeaths = () => {
     console.log("Showing deaths screen...");
     setShowCornucopia(false);
+    setShowDayEvents(false);
     setShowDeaths(true);
   };
 
   const simulateDay = () => {
     console.log("Simulating day...");
+
+    const events: string[] = [];
 
     const updatedTributes = tributes.map(tribute => {
       if (!tribute.isAlive) return tribute;
@@ -208,40 +569,61 @@ export default function TributeSetup() {
           const opponent = opponents[Math.floor(Math.random() * opponents.length)];
           const opponentIndex = tributes.findIndex(t => t.name === opponent.name);
 
+          const weapon = tribute.weapons[0] || "bare hands";
+          const isMelee = weapon === "melee";
+          let attackDescription = '';
+
+          if (isMelee) {
+            const meleeWeapon = meleeweapon[Math.floor(Math.random() * meleeweapon.length)];
+            attackDescription = `with a ${meleeWeapon}`;
+            tribute.weapons[0] = meleeWeapon;
+          }
+
           if (Math.random() > 0.5) {
             // 当前参与者获胜
             tributes[opponentIndex].isAlive = false;
             tribute.kills += 1;
-            const weapon = tribute.weapons[0] || "bare hands";
-            const killMessage = `${tribute.name} kills ${opponent.name} with ${weapon}.`;
+            const killMessage = `Day ${dayCounter}: ${tribute.name} kills ${opponent.name} ${attackDescription}`;
             tribute.events.push(killMessage);
-            tributes[opponentIndex].events.push(`Killed by ${tribute.name}.`);
+            tributes[opponentIndex].events.push(`Day ${dayCounter}: Killed by ${tribute.name}`);
+            events.push(killMessage);
           } else {
             // 对手获胜
             tribute.isAlive = false;
             tributes[opponentIndex].kills += 1;
-            const weapon = opponent.weapons[0] || "bare hands";
-            const killMessage = `${opponent.name} kills ${tribute.name} with ${weapon}.`;
+            const killMessage = `Day ${dayCounter}: ${opponent.name} kills ${tribute.name} ${attackDescription}`;
             tributes[opponentIndex].events.push(killMessage);
-            tribute.events.push(`Killed by ${opponent.name}.`);
+            tribute.events.push(`Day ${dayCounter}: Killed by ${opponent.name}`);
+            events.push(killMessage);
           }
         }
       } else if (eventRoll < 0.6) {
         // 物品使用或受伤
         if (tribute.items.length > 0) {
           const item = tribute.items.pop();
-          tribute.events.push(`${tribute.name} uses ${item}.`);
+          const eventMessage = `Day ${dayCounter}: ${tribute.name} uses ${item}`;
+          tribute.events.push(eventMessage);
+          events.push(eventMessage);
         } else {
-          tribute.events.push(`${tribute.name} gets injured.`);
+          const injuryEvent = injury[Math.floor(Math.random() * injury.length)];
+          const eventMessage = `Day ${dayCounter}: ${tribute.name} ${injuryEvent}`;
+          tribute.events.push(eventMessage);
+          events.push(eventMessage);
         }
       } else {
-        // 治疗
-        tribute.events.push(`${tribute.name} rests and recovers.`);
+        // 日常行为
+        const miscEvent = misc[Math.floor(Math.random() * misc.length)];
+        const eventMessage = `Day ${dayCounter}: ${tribute.name} ${miscEvent}`;
+        tribute.events.push(eventMessage);
+        events.push(eventMessage);
       }
 
       return tribute;
     });
 
+    setDayEvents(events);
+    setShowDeaths(false);
+    setShowDayEvents(true);
     setTributes(updatedTributes);
   };
 
@@ -249,6 +631,7 @@ export default function TributeSetup() {
     const aliveTributes = tributes.filter(t => t.isAlive);
     if (aliveTributes.length === 1) {
       setShowWinner(true);
+      setShowDayEvents(false);
       setShowDeaths(false);
       setShowCornucopia(false);
       setShowTributeStatus(false);
@@ -268,18 +651,21 @@ export default function TributeSetup() {
 
   const proceedToDay = () => {
     console.log("Proceeding to day...");
+    
     declareWinner();
+
     if (dayCounter === 0) {
       cornucopiaNow();
     } else {
       simulateDay();
+    declareWinner();
     }
     dayCounter++;
   };
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      {!showTributeInputs && !showTributeStatus && !showDeaths && !showCornucopia && !showWinner && (
+      {!showTributeInputs && !showTributeStatus && !showDeaths && !showCornucopia && !showWinner && !showDayEvents && (
         <div className="animate-fade-in">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-display font-bold mb-4">
@@ -309,6 +695,31 @@ export default function TributeSetup() {
                 ${!isGenerateButtonEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               Generate Tribute Forms ({tributeCount} tributes)
+            </button>
+          </div>
+        </div>
+      )}
+      {/* 当天事件显示区块 */}
+      {showDayEvents && (
+        <div className="animate-fade-in">
+          <h2 className="text-3xl font-display font-bold mb-4 text-center">
+            Day Events
+          </h2>
+          
+          <div className="grid gap-4 mb-8">
+            {dayEvents.map((event, index) => (
+              <div key={index} className="bg-secondary-light p-4 rounded-lg">
+                <p className="text-white">{event}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 text-center">
+            <button 
+              onClick={toDeaths}
+              className="bg-primary hover:bg-primary-dark px-6 py-2 rounded-full font-semibold transition-colors"
+            >
+              View The Fallen
             </button>
           </div>
         </div>
@@ -360,7 +771,7 @@ export default function TributeSetup() {
       )}
 
       {/* Tribute Status Display */}
-      {showTributeStatus && !showDeaths && !showCornucopia && !showWinner && (
+      {showTributeStatus && !showDeaths && !showCornucopia && !showWinner && !showDayEvents && (
         <div className="animate-fade-in">
           <h2 className="text-3xl font-display font-bold mb-4 text-center">
             Tribute Status
@@ -463,19 +874,27 @@ export default function TributeSetup() {
             </p>
           </div>
 
-          {/* 死亡信息 */}
-          <div className="grid gap-6">
-            {tributes.filter(t => !t.isAlive).map((tribute, index) => (
-              <div key={index} className="bg-secondary-light p-6 rounded-lg">
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-primary font-display text-2xl">
-                    #{index + 1}
-                  </span>
-                  <div>
-                    <h3 className="text-xl font-semibold">{tribute.name}</h3>
-                    <p className="text-white/60">{tribute.gender}</p>
+          {/* 无人死亡的情况 */}
+          {tributes.filter(t => !t.isAlive).length === 0 ? (
+            <div className="bg-secondary-light p-6 rounded-lg text-center">
+              <p className="text-xl text-white/80">
+                All tributes have survived the bloodbath!
+              </p>
+            </div>
+          ) : (
+            // 原有的死亡信息显示代码
+            <div className="grid gap-6">
+              {tributes.filter(t => !t.isAlive).map((tribute, index) => (
+                <div key={index} className="bg-secondary-light p-6 rounded-lg">
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="text-primary font-display text-2xl">
+                      #{index + 1}
+                    </span>
+                    <div>
+                      <h3 className="text-xl font-semibold">{tribute.name}</h3>
+                      <p className="text-white/60">{tribute.gender}</p>
+                    </div>
                   </div>
-                </div>
 
                 {/* 击杀信息 */}
                 {tribute.kills > 0 && (
@@ -504,23 +923,24 @@ export default function TributeSetup() {
                   </div>
                 )}
 
-                {/* 事件历史 */}
-                <div className="mt-4">
-                  <h4 className="text-lg font-semibold mb-2 text-primary/90">Event History</h4>
-                  <div className="space-y-2">
-                    {tribute.events.map((event, eventIndex) => (
-                      <div 
-                        key={eventIndex}
-                        className="px-4 py-2 bg-secondary/30 rounded text-white/80"
-                      >
-                        {event}
-                      </div>
-                    ))}
+                  {/* 事件历史 */}
+                  <div className="mt-4">
+                    <h4 className="text-lg font-semibold mb-2 text-primary/90">Event History</h4>
+                    <div className="space-y-2">
+                      {tribute.events.map((event, eventIndex) => (
+                        <div 
+                          key={eventIndex}
+                          className="px-4 py-2 bg-secondary/30 rounded text-white/80"
+                        >
+                          {event}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* 继续按钮 */}
           <div className="mt-8 text-center">
@@ -528,7 +948,7 @@ export default function TributeSetup() {
               onClick={proceedToDay}
               className="bg-primary hover:bg-primary-dark px-8 py-3 rounded-full font-semibold transition-colors"
             >
-              Continue to Day {dayCounter + 1}
+              Continue to Day {dayCounter}
             </button>
           </div>
         </div>
@@ -616,6 +1036,7 @@ export default function TributeSetup() {
           </div>
         </div>
       )}
+
     </div>
   );
 } 
