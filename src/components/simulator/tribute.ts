@@ -7,4 +7,5 @@ export interface Tribute {
     items: string[];
     weapons: string[];
     hasActed?: boolean;
+    avatarUrl?: string;
   }

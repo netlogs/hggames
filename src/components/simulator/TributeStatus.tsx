@@ -17,6 +17,15 @@ export default function TributeStatus({
       <div className="grid gap-4">
         {tributes.map((tribute, index) => (
           <div key={index} className="flex items-center gap-4 bg-secondary-light p-4 rounded-lg">
+            {tribute.avatarUrl && (
+              <div className="w-12 h-12 rounded-full overflow-hidden">
+                <img 
+                  src={tribute.avatarUrl} 
+                  alt={`${tribute.name}'s avatar`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
             <span className="text-primary font-display w-8">
               #{index + 1}
             </span>
