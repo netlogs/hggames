@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
-
+import TributeCountForm from './TributeCountForm';
+import TributeInputForm from './TributeInputForm';
+import TributeStatus from './TributeStatus';
+import CornucopiaEvents from './CornucopiaEvents';
+import DayEvents from './DayEvents';
+import DeathsDisplay from './DeathsDisplay';
+import WinnerDisplay from './WinnerDisplay';
 // 导入必要的数组
 const weapons = [
   "landmine", "bow", "melee", "paintball", "basketball",
@@ -666,377 +672,59 @@ export default function TributeSetup() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {!showTributeInputs && !showTributeStatus && !showDeaths && !showCornucopia && !showWinner && !showDayEvents && (
-        <div className="animate-fade-in">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-display font-bold mb-4">
-              How Many Tributes?
-            </h2>
-            <p className="text-white/70 mb-6">
-              Enter the number of tributes (2-24)
-            </p>
-            <p className="text-white/70 mb-6">if can't click, try to click on the blank webpage next to it.</p>
-          </div>
-          
-          <div className="flex flex-col items-center gap-4">
-            <input
-              type="number"
-              min="2"
-              max="24"
-              value={tributeCount || ''}
-              onChange={handleTributeCountChange}
-              onBlur={handleTributeCountChange} // 添加失焦事件处理
-              className="bg-secondary-light border border-primary/30 rounded-lg px-4 py-2 w-32 text-center text-xl focus:outline-none focus:border-primary"
-            />
-            
-            <button
-              onClick={handleGenerate}
-              disabled={!isGenerateButtonEnabled}
-              className={`bg-primary hover:bg-primary-dark px-8 py-3 rounded-full font-semibold transition-colors
-                ${!isGenerateButtonEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              Generate Tribute Forms ({tributeCount} tributes)
-            </button>
-          </div>
-        </div>
-      )}
-      {/* 当天事件显示区块 */}
-      {showDayEvents && (
-        <div className="animate-fade-in">
-          <h2 className="text-3xl font-display font-bold mb-4 text-center">
-            Day Events
-          </h2>
-          
-          <div className="grid gap-4 mb-8">
-            {dayEvents.map((event, index) => (
-              <div key={index} className="bg-secondary-light p-4 rounded-lg">
-                <p className="text-white">{event}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 text-center">
-            <button 
-              onClick={toDeaths}
-              className="bg-primary hover:bg-primary-dark px-6 py-2 rounded-full font-semibold transition-colors"
-            >
-              View The Fallen
-            </button>
-          </div>
-        </div>
+        <TributeCountForm 
+          tributeCount={tributeCount}
+          onCountChange={handleTributeCountChange}
+          onGenerate={handleGenerate}
+          isGenerateEnabled={isGenerateButtonEnabled}
+        />
       )}
 
-      {/* Tribute Input Forms */}
       {showTributeInputs && !showTributeStatus && (
-        <div className="animate-fade-in">
-          <div className="grid gap-4">
-            {tributes.map((tribute, index) => (
-              <div key={index} className="flex items-center gap-4 bg-secondary-light p-4 rounded-lg">
-                <span className="text-primary font-display w-8">
-                  #{index + 1}
-                </span>
-                <input
-                  type="text"
-                  placeholder="Tribute Name"
-                  value={tribute.name}
-                  onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-                  className="flex-grow bg-secondary border border-white/10 rounded px-3 py-2 focus:outline-none focus:border-primary"
-                />
-                <select 
-                  value={tribute.gender}
-                  onChange={(e) => handleInputChange(index, 'gender', e.target.value)}
-                  className="bg-secondary border border-white/10 rounded px-3 py-2 focus:outline-none focus:border-primary"
-                >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-8 text-center">
-            <button 
-              onClick={() => setShowTributeInputs(false)}
-              className="bg-white/10 hover:bg-white/20 px-6 py-2 rounded-full font-semibold transition-colors mr-4"
-            >
-              Back
-            </button>
-            <button 
-              onClick={registerNames}
-              className="bg-primary hover:bg-primary-dark px-6 py-2 rounded-full font-semibold transition-colors"
-            >
-              Confirm Names
-            </button>
-          </div>
-        </div>
+        <TributeInputForm
+          tributes={tributes}
+          onInputChange={handleInputChange} 
+          onBack={() => setShowTributeInputs(false)}
+          onConfirm={registerNames}
+        />
       )}
 
-      {/* Tribute Status Display */}
       {showTributeStatus && !showDeaths && !showCornucopia && !showWinner && !showDayEvents && (
-        <div className="animate-fade-in">
-          <h2 className="text-3xl font-display font-bold mb-4 text-center">
-            Tribute Status
-          </h2>
-          <div className="grid gap-4">
-            {tributes.map((tribute, index) => (
-              <div key={index} className="flex items-center gap-4 bg-secondary-light p-4 rounded-lg">
-                <span className="text-primary font-display w-8">
-                  #{index + 1}
-                </span>
-                <div className="flex-grow">
-                  <p className="text-white font-semibold">{tribute.name} ({tribute.gender})</p>
-                  <p className="text-white/70">Status: {tribute.isAlive ? 'Alive' : 'Dead'}</p>
-                  <p className="text-white/70">Kills: {tribute.kills}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8 text-center">
-            <button 
-              onClick={proceedToDay}
-              className="bg-primary hover:bg-primary-dark px-6 py-2 rounded-full font-semibold transition-colors"
-            >
-              Proceed
-            </button>
-          </div>
-        </div>
+        <TributeStatus
+          tributes={tributes}
+          onProceed={proceedToDay}
+        />
       )}
 
-      {/* Cornucopia Events Display */}
       {showCornucopia && (
-        <div className="animate-fade-in">
-          <h2 className="text-3xl font-display font-bold mb-4 text-center">
-            The Bloodbath
-          </h2>
-          
-          <div className="grid gap-6">
-            {tributes.map((tribute, index) => (
-              <div key={index} className="bg-secondary-light p-6 rounded-lg">
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-primary font-display text-2xl">
-                    #{index + 1}
-                  </span>
-                  <div>
-                    <h3 className="text-xl font-semibold">{tribute.name}</h3>
-                    <p className="text-white/60">{tribute.gender}</p>
-                  </div>
-                </div>
-
-                {/* 事件历史 */}
-                <div className="space-y-2">
-                  {tribute.events.map((event, eventIndex) => (
-                    <div 
-                      key={eventIndex}
-                      className="px-4 py-2 bg-secondary/30 rounded text-white/80"
-                    >
-                      {event}
-                    </div>
-                  ))}
-                </div>
-
-                {/* 状态信息 */}
-                <div className="mt-4 flex gap-4">
-                  <span className={`px-3 py-1 rounded-full ${tribute.isAlive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                    {tribute.isAlive ? 'Survived' : 'Deceased'}
-                  </span>
-                  {tribute.kills > 0 && (
-                    <span className="px-3 py-1 rounded-full bg-primary/20 text-primary">
-                      {tribute.kills} kills
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* 继续按钮 */}
-          <div className="mt-8 text-center">
-            <button 
-              onClick={toDeaths}
-              className="bg-primary hover:bg-primary-dark px-8 py-3 rounded-full font-semibold transition-colors"
-            >
-              View The Fallen
-            </button>
-          </div>
-        </div>
+        <CornucopiaEvents 
+          tributes={tributes}
+          onContinue={toDeaths}
+        />
       )}
 
-      {/* Deaths Display */}
+      {showDayEvents && (
+        <DayEvents
+          events={dayEvents}
+          onContinue={toDeaths} 
+        />
+      )}
+
       {showDeaths && (
-        <div className="animate-fade-in">
-          <h2 className="text-3xl font-display font-bold mb-4 text-center">
-            The Fallen
-          </h2>
-          
-          {/* 存活统计 */}
-          <div className="mb-8 text-center">
-            <p className="text-xl text-white/80">
-              {tributes.filter(t => t.isAlive).length} tributes remaining
-            </p>
-          </div>
-
-          {/* 无人死亡的情况 */}
-          {tributes.filter(t => !t.isAlive).length === 0 ? (
-            <div className="bg-secondary-light p-6 rounded-lg text-center">
-              <p className="text-xl text-white/80">
-                All tributes have survived the bloodbath!
-              </p>
-            </div>
-          ) : (
-            // 原有的死亡信息显示代码
-            <div className="grid gap-6">
-              {tributes.filter(t => !t.isAlive).map((tribute, index) => (
-                <div key={index} className="bg-secondary-light p-6 rounded-lg">
-                  <div className="flex items-center gap-4 mb-4">
-                    <span className="text-primary font-display text-2xl">
-                      #{index + 1}
-                    </span>
-                    <div>
-                      <h3 className="text-xl font-semibold">{tribute.name}</h3>
-                      <p className="text-white/60">{tribute.gender}</p>
-                    </div>
-                  </div>
-
-                {/* 击杀信息 */}
-                {tribute.kills > 0 && (
-                  <div className="mb-3 px-4 py-2 bg-primary/10 rounded">
-                    <p className="text-white/90">
-                      Kills before death: {tribute.kills}
-                    </p>
-                  </div>
-                )}
-
-                {/* 获得的物品 */}
-                {tribute.items.length > 0 && (
-                  <div className="mb-3 px-4 py-2 bg-secondary/50 rounded">
-                    <p className="text-white/90">
-                      Items collected: {tribute.items.join(", ")}
-                    </p>
-                  </div>
-                )}
-
-                {/* 获得的武器 */}
-                {tribute.weapons.length > 0 && (
-                  <div className="mb-3 px-4 py-2 bg-secondary/50 rounded">
-                    <p className="text-white/90">
-                      Weapons collected: {tribute.weapons.join(", ")}
-                    </p>
-                  </div>
-                )}
-
-                  {/* 事件历史 */}
-                  <div className="mt-4">
-                    <h4 className="text-lg font-semibold mb-2 text-primary/90">Event History</h4>
-                    <div className="space-y-2">
-                      {tribute.events.map((event, eventIndex) => (
-                        <div 
-                          key={eventIndex}
-                          className="px-4 py-2 bg-secondary/30 rounded text-white/80"
-                        >
-                          {event}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* 继续按钮 */}
-          <div className="mt-8 text-center">
-            <button 
-              onClick={proceedToDay}
-              className="bg-primary hover:bg-primary-dark px-8 py-3 rounded-full font-semibold transition-colors"
-            >
-              Continue to Day {dayCounter}
-            </button>
-          </div>
-        </div>
+        <DeathsDisplay
+          tributes={tributes}
+          dayCounter={dayCounter}
+          onContinue={proceedToDay}
+        />
       )}
 
-      {/* Winner Display */}
       {showWinner && (
-        <div className="animate-fade-in">
-          <div className="bg-secondary-light p-8 rounded-lg text-center">
-            <h2 className="text-4xl font-display font-bold mb-6 text-primary">
-              Victory Royale
-            </h2>
-            
-            {tributes.filter(t => t.isAlive).map(winner => (
-              <div key={winner.name} className="space-y-6">
-                <div className="text-3xl font-semibold mb-2">
-                  {winner.name}
-                </div>
-                
-                <div className="flex justify-center items-center gap-4">
-                  <span className="px-4 py-2 bg-primary/20 rounded-full text-primary">
-                    {winner.kills} Kills
-                  </span>
-                  <span className="px-4 py-2 bg-green-500/20 rounded-full text-green-400">
-                    Last One Standing
-                  </span>
-                </div>
-
-                {/* 获胜者详细信息 */}
-                <div className="mt-6 space-y-4">
-                  {/* 收集的物品 */}
-                  {winner.items.length > 0 && (
-                    <div className="px-4 py-2 bg-secondary/30 rounded">
-                      <h3 className="font-semibold mb-2">Collected Items</h3>
-                      <p className="text-white/80">{winner.items.join(", ")}</p>
-                    </div>
-                  )}
-                  
-                  {/* 获得的武器 */}
-                  {winner.weapons.length > 0 && (
-                    <div className="px-4 py-2 bg-secondary/30 rounded">
-                      <h3 className="font-semibold mb-2">Weapons</h3>
-                      <p className="text-white/80">{winner.weapons.join(", ")}</p>
-                    </div>
-                  )}
-
-                  {/* 事件历史 */}
-                  <div className="mt-6">
-                    <h3 className="font-semibold mb-4">Victory Journey</h3>
-                    <div className="space-y-2">
-                      {winner.events.map((event, index) => (
-                        <div 
-                          key={index}
-                          className="px-4 py-2 bg-secondary/30 rounded text-white/80"
-                        >
-                          {event}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* 游戏统计 */}
-                <div className="mt-8 p-4 bg-secondary/30 rounded">
-                  <h3 className="font-semibold mb-2">Game Statistics</h3>
-                  <p className="text-white/80">
-                    Survived for {dayCounter} days
-                  </p>
-                  <p className="text-white/80">
-                    Defeated {tributes.length - 1} opponents
-                  </p>
-                </div>
-              </div>
-            ))}
-
-            {/* 重新开始按钮 */}
-            <div className="mt-8">
-              <button 
-                onClick={resetGame}
-                className="bg-primary hover:bg-primary-dark px-8 py-3 rounded-full font-semibold transition-colors"
-              >
-                Start New Game
-              </button>
-            </div>
-          </div>
-        </div>
+        <WinnerDisplay
+          tributes={tributes}
+          dayCounter={dayCounter}
+          onRestart={resetGame}
+        />
       )}
-
     </div>
   );
 } 
