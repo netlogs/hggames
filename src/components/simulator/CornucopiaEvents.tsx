@@ -19,6 +19,18 @@ export default function CornucopiaEvents({
         {tributes.map((tribute, index) => (
           <div key={index} className="bg-secondary-light p-6 rounded-lg">
             <div className="flex items-center gap-4 mb-4">
+              {tribute.avatarUrl && (
+                <div className="w-12 h-12 rounded-full overflow-hidden">
+                  <img 
+                    src={tribute.avatarUrl} 
+                    alt={`${tribute.name}'s avatar`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'placeholder.png';
+                    }}
+                  />
+                </div>
+              )}
               <span className="text-primary font-display text-2xl">
                 #{index + 1}
               </span>

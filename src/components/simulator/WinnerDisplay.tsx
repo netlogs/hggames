@@ -20,6 +20,21 @@ export default function WinnerDisplay({
         
         {tributes.filter(t => t.isAlive).map(winner => (
           <div key={winner.name} className="space-y-6">
+            {winner.avatarUrl && (
+              <div className="flex justify-center mb-6">
+                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary">
+                  <img
+                    src={winner.avatarUrl}
+                    alt={`${winner.name}'s avatar`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'placeholder.png';
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+            
             <div className="text-3xl font-semibold mb-2">
               {winner.name}
             </div>
