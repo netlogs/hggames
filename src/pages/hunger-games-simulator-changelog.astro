@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Changelog - Hunger Games Simulator">
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <h1 class="text-4xl font-display font-bold text-center mb-12 mt-8">
+      Hunger Games Simulator Changelog
+    </h1>
+    
+    <p class="text-center text-white/60 mt-12 mb-16">
+      Want more updates? Contact me on <a href="https://x.com/liarpzu" class="text-primary hover:underline">X</a>!
+    </p>
+    
+
+    <div class="space-y-12">
+      <!-- 最新更新 -->
+      <div class="bg-secondary-light rounded-lg p-6">
+        <div class="flex items-center gap-4 mb-4">
+          <span class="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm">
+            Latest
+          </span>
+          <time class="text-white/60">2024-12-05</time>
+        </div>
+        <h2 class="text-2xl font-semibold mb-4">Avatar System Update</h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-primary mb-2">New Features</h3>
+            <ul class="list-disc list-inside space-y-2 text-white/80">
+              <li>Added avatar support for tributes</li>
+              <li>Implemented batch avatar URL input system</li>
+              <li>Added avatar display in tribute details</li>
+              <li>Added avatar display in The Bloodbath phase</li>
+              <li>Added avatar display in Victory Royale screen</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-primary mb-2">Improvements</h3>
+            <ul class="list-disc list-inside space-y-2 text-white/80">
+              <li>Enhanced tribute card layout to accommodate avatars</li>
+              <li>Added image loading error handling with fallback image</li>
+              <li>Improved visual feedback for avatar uploads</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 历史更新 -->
+      <div class="bg-secondary-light rounded-lg p-6">
+        <div class="flex items-center gap-4 mb-4">
+          <time class="text-white/60">2024-12-03</time>
+        </div>
+        <h2 class="text-2xl font-semibold mb-4">Initial Release</h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-primary mb-2">Features</h3>
+            <ul class="list-disc list-inside space-y-2 text-white/80">
+              <li>Basic Hunger Games simulation system</li>
+              <li>Tribute management</li>
+              <li>Event generation</li>
+              <li>Day cycle</li>
+              <li>Victory conditions</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 模板：复制这个结构来添加新的更新记录 -->
+      <!-- <div class="bg-secondary-light rounded-lg p-6">
+        <div class="flex items-center gap-4 mb-4">
+          <time class="text-white/60">YYYY-MM-DD</time>
+        </div>
+        <h2 class="text-2xl font-semibold mb-4">Update Title</h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-primary mb-2">Category</h3>
+            <ul class="list-disc list-inside space-y-2 text-white/80">
+              <li>Update item</li>
+            </ul>
+          </div>
+        </div>
+      </div> -->
+    </div>
+    
+  </main>
+</Layout> 

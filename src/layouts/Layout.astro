@@ -26,6 +26,33 @@ const {
       rel="stylesheet"
     />
     <title>{title} | HGgames</title>
+
+    <!-- 添加结构化数据 -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "HGgames",
+        "url": "https://hggames.org",
+        "sameAs": [
+          "https://x.com/liarpzu"
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SiteNavigationElement",
+        "name": [
+          "Start Hunger Games Simulator",
+          "Update Log"
+        ],
+        "url": [
+          "https://hggames.org/simulator",
+          "https://hggames.org/hunger-games-simulator-changelog"
+        ]
+      }
+    </script>
   </head>
   <body class="bg-secondary text-white min-h-screen flex flex-col">
     <Header />
