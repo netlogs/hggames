@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Terms of Service"
+  description="Terms of service for the Hunger Games Simulator website."
+>
+  <main class="container mx-auto px-4 py-12 max-w-4xl mt-8">
+    <h1 class="text-4xl font-display font-bold mb-8">Terms of Service</h1>
+    
+    <div class="prose prose-invert max-w-none">
+      <p class="mb-6">Last updated: {new Date().toLocaleDateString()}</p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4">1. Acceptance of Terms</h2>
+      <p>By accessing and using the Hunger Games Simulator, you agree to these terms of service.</p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4">2. Service Description</h2>
+      <p>The Hunger Games Simulator is a free-to-use web application that simulates fictional survival game scenarios.</p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4">3. User Conduct</h2>
+      <p>Users agree to:</p>
+      <ul class="list-disc pl-6 mb-6">
+        <li>Use the simulator for entertainment purposes only</li>
+        <li>Not use the service for any illegal purposes</li>
+        <li>Not attempt to disrupt or compromise the service</li>
+        <li>Not use offensive or inappropriate tribute names</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4">4. Intellectual Property</h2>
+      <p>The Hunger Games Simulator is inspired by The Hunger Games but is not affiliated with or endorsed by the original creators. All original content and code are property of Cepistle.</p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4">5. Disclaimer</h2>
+      <p>The service is provided "as is" without warranties of any kind. We are not responsible for any damages arising from the use of this service.</p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4">6. Changes to Terms</h2>
+      <p>We reserve the right to modify these terms at any time. Continued use of the service constitutes acceptance of modified terms.</p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4">7. Contact</h2>
+      <p>For questions about these terms, please contact: <a href="mailto:colorepistle@gmail.com" class="text-primary hover:underline">colorepistle@gmail.com</a></p>
+    </div>
+  </main>
+</Layout> 
