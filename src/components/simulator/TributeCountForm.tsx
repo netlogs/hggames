@@ -20,8 +20,8 @@ export default function TributeCountForm({
         <p className="text-white/70 mb-6">
           Enter the number of tributes (2-24)
         </p>
-        <p className="text-white/70 mb-6">
-          if can't click, try to click on the blank webpage next to it.
+        <p className="animate-gradient-text mb-6">
+        A huge update is coming soon, with a brand new page experience, abundant content, and more complete gameplay! edit in 2024-12-10
         </p>
       </div>
       
