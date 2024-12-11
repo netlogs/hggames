@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="The Bloodbath">
+	<main class="container mx-auto px-4 py-8 pt-20">
+		<div class="text-center space-y-6">
+			<h1 class="text-4xl font-bold text-red-800">
+				The Bloodbath
+			</h1>
+
+			<p class="text-xl text-gray-600 italic">
+				As the tributes stand on their podiums, the horn sounds.
+			</p>
+
+			<div class="mt-8 space-y-4" id="events-container">
+				<!-- 将在客户端填充 -->
+			</div>
+
+			<div class="mt-8">
+				<button
+					id="proceedButton"
+					class="px-8 py-3 bg-red-800 hover:bg-red-900 text-white rounded-lg transition-colors"
+				>
+					Proceed
+				</button>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<script>
+	function updateDisplay() {
+		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
+		const container = document.getElementById('events-container');
+		
+		if (container && events['The Bloodbath']) {
+			container.innerHTML = '';
+			events['The Bloodbath'].forEach(event => {
+				const p = document.createElement('p');
+				p.textContent = event;
+				p.className = 'text-lg text-gray-700 bg-red-50 p-4 rounded-lg';
+				container.appendChild(p);
+			});
+		}
+	}
+
+	updateDisplay();
+	window.addEventListener('storage', updateDisplay);
+
+	// 添加Proceed按钮事件处理
+	document.getElementById('proceedButton').addEventListener('click', async () => {
+		const { processGamePhase } = await import('../hunger/GameFlow');
+		await processGamePhase();
+	});
+</script>
+
+<style>
+	main {
+		min-height: 100vh;
+	}
+</style> 

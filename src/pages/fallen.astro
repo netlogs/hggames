@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Fallen Tributes">
+	<main class="container mx-auto px-4 py-8 pt-20">
+		<div class="text-center space-y-6">
+			<h1 class="text-4xl font-bold text-purple-800">
+				Fallen Tributes
+			</h1>
+
+			<p class="text-xl text-gray-600 italic">
+				Let us remember those who have fallen.
+			</p>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8" id="tributes-container">
+				<!-- 将在客户端填充 -->
+			</div>
+
+			<div class="mt-8">
+				<button
+					id="proceedButton"
+					class="px-8 py-3 bg-purple-800 hover:bg-purple-900 text-white rounded-lg transition-colors"
+				>
+					Proceed to Next Day
+				</button>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<script>
+    import { dayCount, nightCount } from '../hunger/MainProcess';
+	function updateDisplay() {
+		const tributesData = JSON.parse(localStorage.getItem('tributes') || '[]');
+		const container = document.getElementById('tributes-container');
+		
+        console.log('dayCount:', dayCount);
+        console.log('nightCount:', nightCount);
+		if (!container) return;
+		
+		container.innerHTML = '';
+		
+		// 按district分组显示
+		for (let district = 1; district <= 12; district++) {
+			const districtTributes = tributesData.filter(t => 
+				t.name.includes(`District ${district}`)
+			);
+
+			const districtDiv = document.createElement('div');
+			districtDiv.className = 'bg-purple-50 p-6 rounded-lg';
+			
+			const districtTitle = document.createElement('h2');
+			districtTitle.className = 'text-xl font-bold mb-4 text-purple-800';
+			districtTitle.textContent = `District ${district}`;
+			districtDiv.appendChild(districtTitle);
+
+			districtTributes.forEach(tribute => {
+				const tributeDiv = document.createElement('div');
+				tributeDiv.className = 'flex items-center gap-4 mb-4';
+
+				const avatar = document.createElement('img');
+				avatar.src = tribute.avatar;
+				avatar.className = 'w-12 h-12 rounded-full';
+				avatar.alt = tribute.name;
+				tributeDiv.appendChild(avatar);
+
+				const infoDiv = document.createElement('div');
+				infoDiv.className = 'flex-1';
+
+				const name = document.createElement('div');
+				name.className = `font-semibold ${tribute.status === 'dead' ? 'text-red-600 line-through' : 'text-gray-800'}`;
+				name.textContent = tribute.name;
+				infoDiv.appendChild(name);
+
+				const stats = document.createElement('div');
+				stats.className = 'text-sm text-gray-600';
+				stats.textContent = `Kills: ${tribute.killnum}`;
+				infoDiv.appendChild(stats);
+
+				tributeDiv.appendChild(infoDiv);
+				districtDiv.appendChild(tributeDiv);
+			});
+
+			container.appendChild(districtDiv);
+		}
+	}
+
+	updateDisplay();
+	window.addEventListener('storage', updateDisplay);
+
+	// 添加Proceed按钮事件处理
+	document.getElementById('proceedButton').addEventListener('click', async () => {
+		const { processGamePhase } = await import('../hunger/GameFlow');
+		await processGamePhase();
+	});
+</script>
+
+<style>
+	main {
+		min-height: 100vh;
+	}
+</style> 
