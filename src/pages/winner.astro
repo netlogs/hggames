@@ -1,0 +1,77 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Victory">
+	<main class="container mx-auto px-4 py-8 pt-20">
+		<div class="text-center space-y-6">
+			<h1 class="text-4xl font-bold text-primary">
+				Victory!
+			</h1>
+
+			<div class="mt-8 space-y-4" id="winner-container">
+				<!-- 将在客户端填充 -->
+			</div>
+
+			<!-- 使用<a>标签替代button -->
+			<div class="fixed bottom-8 left-0 right-0 flex justify-center">
+				<a
+					href="/"
+					class="bg-primary hover:bg-primary/80 text-white font-bold py-3 px-8 rounded-lg transition-colors cursor-pointer"
+					onclick="localStorage.clear()"
+				>
+					Restart Simulation
+				</a>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<script>
+	function displayWinner() {
+		// 获取并记录所有游戏状态
+		const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
+		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
+		const currentPhase = localStorage.getItem('currentPhase');
+		
+		console.log('=== Winner Page Debug Info ===');
+		console.log('Current Phase:', currentPhase);
+		console.log('All Events:', events);
+		console.log('All Tributes:', tributes);
+		console.log('Alive Tributes:', tributes.filter(t => t.status !== 'dead'));
+		console.log('Dead Tributes:', tributes.filter(t => t.status === 'dead'));
+		console.log('Tribute Status Count:', {
+			total: tributes.length,
+			alive: tributes.filter(t => t.status !== 'dead').length,
+			dead: tributes.filter(t => t.status === 'dead').length
+		});
+		
+		const winner = tributes.find(t => t.status !== 'dead');
+		console.log('Found Winner:', winner);
+		
+		const container = document.getElementById('winner-container');
+		
+		if (container && winner) {
+			container.innerHTML = `
+				<div class="bg-primary/10 p-8 rounded-lg">
+					<img src="${winner.avatar}" alt="${winner.name}" class="w-32 h-32 rounded-full mx-auto mb-4">
+					<h2 class="text-2xl font-bold mb-2">${winner.name}</h2>
+					<p class="text-lg text-gray-600">Kills: ${winner.killnum}</p>
+				</div>
+			`;
+		} else {
+			console.error('Error: No winner found or container missing');
+			if (!container) console.error('Winner container element not found');
+			if (!winner) console.error('No surviving tribute found');
+		}
+	}
+
+	// 页面加载时显示获胜者
+	displayWinner();
+</script>
+
+<style>
+	main {
+		min-height: 100vh;
+	}
+</style> 

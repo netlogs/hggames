@@ -1,0 +1,91 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Day Events">
+	<main class="container mx-auto px-4 py-8 pt-20">
+		<div class="text-center space-y-6">
+			<h1 class="text-4xl font-bold text-yellow-800" id="phase-title">
+				<!-- 将在客户端填充 -->
+			</h1>
+
+			<p class="text-xl text-gray-600 italic">
+				As the sun rises, the tributes begin their day.
+			</p>
+
+			<div class="mt-8 space-y-4" id="events-container">
+				<!-- 将在客户端填充 -->
+			</div>
+
+			<div class="mt-8">
+				<button
+					id="proceedButton"
+					class="px-8 py-3 bg-yellow-800 hover:bg-yellow-900 text-white rounded-lg transition-colors"
+				>
+					Proceed
+				</button>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<script>
+    import { dayCount, nightCount } from '../hunger/MainProcess';
+	function updateDisplay() {
+		console.log('Updating day display...');
+		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
+		const currentPhase = localStorage.getItem('currentPhase') || '';
+		
+		console.log('Current phase:', currentPhase);
+		console.log('Events:', events);
+        console.log('dayCount:', dayCount);
+        console.log('nightCount:', nightCount);
+		
+		// 更新标题
+		const phaseTitle = document.getElementById('phase-title');
+		if (phaseTitle) {
+			const dayNumber = currentPhase.match(/\d+/)?.[0] || '1';
+			phaseTitle.textContent = `Day ${dayNumber}`;
+			console.log('Updated phase title to:', `Day ${dayNumber}`);
+		} else {
+			console.error('Phase title element not found');
+		}
+
+		// 更新事件列表
+		const container = document.getElementById('events-container');
+		if (container && events[currentPhase]) {
+			container.innerHTML = '';
+			console.log('Displaying events for phase:', currentPhase);
+			console.log('Events to display:', events[currentPhase]);
+			
+			events[currentPhase].forEach(event => {
+				const p = document.createElement('p');
+				p.textContent = event;
+				p.className = 'text-lg text-gray-700 bg-yellow-50 p-4 rounded-lg';
+				container.appendChild(p);
+			});
+		} else {
+			console.error('Events container not found or no events for current phase');
+			console.log('Container:', container);
+			console.log('Events for phase:', events[currentPhase]);
+		}
+	}
+
+	// 页面加载时更新显示
+	document.addEventListener('DOMContentLoaded', updateDisplay);
+
+	// 监听 storage 变化
+	window.addEventListener('storage', updateDisplay);
+
+	// 添加Proceed按钮事件处理
+	document.getElementById('proceedButton')?.addEventListener('click', async () => {
+		const { processGamePhase } = await import('../hunger/GameFlow');
+		await processGamePhase();
+	});
+</script>
+
+<style>
+	main {
+		min-height: 100vh;
+	}
+</style> 

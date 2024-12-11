@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { initializeGameData, tributes } from '../hunger/MainProcess';
+
+// 初始化游戏数据  用于显示，不用于游戏，这里不能保证游戏的初始化，所以在游戏里面再次初始化
+initializeGameData();
+
+// 创建districts数组
+const districts = Array(12).fill(null).map((_, i) => ({
+  number: i + 1,
+  tributes: [i * 2, i * 2 + 1] // 每个district对应的tribute索引
+}));
+---
+
+<Layout title="The Reaping - Hunger Games">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-center mb-12 mt-8">
+      The Reaping
+    </h1>
+    <h1 class="text-4xl text-primary font-bold text-center mb-12 mt-8">
+      <a href="/hunger-games-simulator-changelog" class="hover:underline">
+        View the latest update logs
+      </a>
+    </h1>
+    <h1 class="text-4xl font-bold text-center mb-12 mt-8">
+      Welcome to continue following, I will update as soon as possible!
+    </h1>
+
+    <div class="max-w-6xl mx-auto">
+      {districts.map((district, index) => (
+        // 每3个district一行
+        index % 3 === 0 && (
+          <div class="mb-8">
+            <div class="grid grid-cols-6 gap-4">
+              {districts.slice(index, index + 3).map(d => (
+                <div class="col-span-2">
+                  <h2 class="text-2xl font-semibold text-center mb-2">
+                    District {d.number}
+                  </h2>
+                  <div class="grid grid-cols-2 gap-2">
+                    {d.tributes.map(tributeIndex => (
+                      <div class="flex flex-col items-center">
+                        <img
+                          src={tributes[tributeIndex].avatar}
+                          alt={`Tribute ${tributeIndex + 1}`}
+                          width="90"
+                          height="90"
+                          class="rounded-full mb-1"
+                        />
+                        <p class="font-semibold">
+                          {tributes[tributeIndex].name}
+                        </p>
+                        <p class="text-green-500">Alive</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      ))}
+    </div>
+
+    <div class="flex justify-center mt-8">
+      <button
+        class="px-8 py-3 bg-primary hover:bg-primary-dark rounded-lg transition-colors"
+        id="proceedButton"
+      >
+        Proceed
+      </button>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    min-height: 100vh;
+  }
+</style>
+
+<script>
+document.getElementById('proceedButton').addEventListener('click', async () => {
+  const { initGame, processGamePhase } = await import('../hunger/GameFlow');
+  initGame(); // 初始化新游戏
+  await processGamePhase(); // 处理bloodbath阶段并跳转
+});
+</script>
