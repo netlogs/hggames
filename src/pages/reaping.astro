@@ -17,13 +17,10 @@ const districts = Array(12).fill(null).map((_, i) => ({
     <h1 class="text-4xl font-bold text-center mb-12 mt-8">
       The Reaping
     </h1>
-    <h1 class="text-4xl text-primary font-bold text-center mb-12 mt-8">
-      <a href="/hunger-games-simulator-changelog" class="hover:underline">
-        View the latest update logs
+    <h1 class="text-3xl text-primary font-bold text-center mb-12 mt-8">
+      <a href="/customize" class="hover:underline">
+        Customize tribute
       </a>
-    </h1>
-    <h1 class="text-4xl font-bold text-center mb-12 mt-8">
-      Welcome to continue following, I will update as soon as possible!
     </h1>
 
     <div class="max-w-6xl mx-auto">
@@ -82,6 +79,8 @@ const districts = Array(12).fill(null).map((_, i) => ({
 <script>
 document.getElementById('proceedButton').addEventListener('click', async () => {
   const { initGame, processGamePhase } = await import('../hunger/GameFlow');
+  const { initializeGameData } = await import('../hunger/MainProcess');
+  initializeGameData();
   initGame(); // 初始化新游戏
   await processGamePhase(); // 处理bloodbath阶段并跳转
 });

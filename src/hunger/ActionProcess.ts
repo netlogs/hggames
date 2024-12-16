@@ -1,5 +1,5 @@
 import { randomNtribute, randomcnt } from './utils';
-import { tributes, events } from './MainProcess';
+import { tributes, events, killEvents } from './MainProcess';
 import type { Tribute } from './Tributes';
 import { singlePersonActions, twoPersonActions, multiPersonActions, phaseSpecificActions } from './ActionTexts';
 
@@ -27,9 +27,16 @@ function markTributeAsActed(tributeIndexes: number[], unactedTributes: Tribute[]
  * @param actionType 行为类型（用于后续确定如何更新状态）
  * @param effect 状态影响信息
  */
-export function updateTributeStatus(tributesToUpdate: Tribute[], actionType: string, effect: any) {
-  console.log('需要更新状态的参赛者:', tributesToUpdate.map(t => t.name));
-  console.log('行为类型:', actionType);
+export function updateTributeStatus(tributesToUpdate: Tribute[], actionType: string, effect: any, currentEvent: any) {
+  const currentPhase = localStorage.getItem('currentPhase') || 'The Bloodbath';
+
+  // 确保events数组已初始化
+  if (!events[currentPhase]) {
+    events[currentPhase] = [];
+  }
+  if (!killEvents[currentPhase]) {
+    killEvents[currentPhase] = [];
+  }
 
   tributesToUpdate.forEach((tribute, i) => {
     let statusEffect = 'normal';
@@ -38,11 +45,26 @@ export function updateTributeStatus(tributesToUpdate: Tribute[], actionType: str
       statusEffect = effect.actor || 'normal';
     } else if (actionType === 'two') {
       statusEffect = i === 0 ? effect.actor || 'normal' : effect.target || 'normal';
+      if (i === 1 && effect.target === 'death') {
+        tributesToUpdate[0].killnum++;
+        // 添加kill事件
+        killEvents[currentPhase].push(currentEvent);
+      }
     } else if (actionType === 'multi') {
       if (effect.winner && i === 0) {
         statusEffect = effect.winner;
+        if (effect.others === 'death') {
+          tribute.killnum += tributesToUpdate.length - 1;
+          // 添加kill事件
+          killEvents[currentPhase].push(currentEvent);
+        }
       } else if (effect.target && i === tributesToUpdate.length - 1) {
         statusEffect = effect.target;
+        if (effect.target === 'death') {
+          tributesToUpdate.slice(0, -1).forEach(t => t.killnum++);
+          // 添加kill事件
+          killEvents[currentPhase].push(currentEvent);
+        }
       } else {
         statusEffect = effect.others || 'normal';
       }
@@ -50,11 +72,13 @@ export function updateTributeStatus(tributesToUpdate: Tribute[], actionType: str
 
     if (statusEffect === 'death') {
       tribute.status = 'dead';
+      // 对于非战斗死亡,也添加kill事件
+      if (!killEvents[currentPhase].includes(currentEvent)) {
+        killEvents[currentPhase].push(currentEvent);
+      }
     } else if (statusEffect === 'injured') {
       tribute.status = 'injuries';
     }
-
-    console.log(`更新 ${tribute.name} 的状态为: ${tribute.status}`);
   });
 }
 
@@ -81,7 +105,6 @@ function getPhaseActions(phase: string, actionType: string) {
  * 单人行为处理函数
  */
 export function singlePersonAction(unactedTributes: Tribute[], phase: string) {
-  console.log('执行单人行为');
   if (unactedTributes.length === 0) return unactedTributes;
   
   const [selectedIndex] = randomNtribute(1, unactedTributes.length);
@@ -102,11 +125,17 @@ export function singlePersonAction(unactedTributes: Tribute[], phase: string) {
   }
   
   const eventText = `${selectedTribute.name} ${actionText}`;
-  console.log(eventText);
   
-  events[phase].push(eventText);
+  const currentEvent = {
+    text: eventText,
+    tributes: [{
+      name: selectedTribute.name,
+      avatar: selectedTribute.avatar
+    }]
+  };
+  events[phase].push(currentEvent);
   
-  updateTributeStatus([selectedTribute], 'single', { actor: 'normal' });
+  updateTributeStatus([selectedTribute], 'single', { actor: 'normal' }, currentEvent);
   // 使用全局索引来标记tribute
   return markTributeAsActed([globalIndex], unactedTributes);
 }
@@ -114,8 +143,7 @@ export function singlePersonAction(unactedTributes: Tribute[], phase: string) {
 /**
  * 双人行为处理函数
  */
-export function twoPersonAction(unactedTributes: Tribute[], phase: string) {
-  console.log('执行双人行为');
+export function twoPersonAction(unactedTributes: Tribute[], phase: string, deathProbability: number = 0.3) {
   if (unactedTributes.length < 2) return unactedTributes;
   
   const selectedIndexes = randomNtribute(2, unactedTributes.length);
@@ -132,10 +160,15 @@ export function twoPersonAction(unactedTributes: Tribute[], phase: string) {
   let actions, actionType;
   if (phaseSpecificTexts && Math.random() < 0.7) { // 70%概率使用阶段特定行为
     actions = phaseSpecificTexts;
-    actionType = Math.floor(Math.random() * 2);
+    actionType = Math.random() < deathProbability ? 0 : 1;
   } else {
     actions = twoPersonActions;
-    actionType = Math.floor(Math.random() * 2);
+    // 根据死亡概率决定是否使用纯致命事件(key=3)
+    if (Math.random() < deathProbability) {
+      actionType = 3;  // 使用纯致命事件
+    } else {
+      actionType = Math.random() < 0.5 ? 0 : 1;  // 在普通和混合事件间随机
+    }
   }
   
   const keys = Object.keys(actions[actionType]);
@@ -143,20 +176,24 @@ export function twoPersonAction(unactedTributes: Tribute[], phase: string) {
   const { text: actionValue, effect } = actions[actionType][actionKey];
   
   const eventText = `${selectedTributes[0].name} ${actionKey} ${selectedTributes[1].name}${actionValue}`;
-  console.log(eventText);
   
-  // 将事件添加到对应阶段
-  events[phase].push(eventText);
+  const currentEvent = {
+    text: eventText,
+    tributes: selectedTributes.map(t => ({
+      name: t.name,
+      avatar: t.avatar
+    }))
+  };
+  events[phase].push(currentEvent);
   
-  updateTributeStatus(selectedTributes, 'two', effect);
+  updateTributeStatus(selectedTributes, 'two', effect, currentEvent);
   return markTributeAsActed(globalIndexes, unactedTributes);
 }
 
 /**
  * 多人行为处理函数
  */
-export function multiPersonAction(unactedTributes: Tribute[], phase: string) {
-  console.log('执行多人行为');
+export function multiPersonAction(unactedTributes: Tribute[], phase: string, deathProbability: number = 0.3) {
   if (unactedTributes.length < 4) return unactedTributes;
   
   const selectedIndexes = randomcnt(4, unactedTributes.length);
@@ -171,12 +208,17 @@ export function multiPersonAction(unactedTributes: Tribute[], phase: string) {
   const phaseSpecificTexts = getPhaseActions(phase, 'multi');
   
   let actions, actionType;
-  if (phaseSpecificTexts && Math.random() < 0.7) { // 70%概率使用阶段特定行为
+  if (phaseSpecificTexts && Math.random() < 0.7) { // 70%概率使用段特定行为
     actions = phaseSpecificTexts;
-    actionType = Math.floor(Math.random() * 2);
+    actionType = Math.random() < deathProbability ? 1 : 0;
   } else {
     actions = multiPersonActions;
-    actionType = Math.floor(Math.random() * 2);
+    // 根据死亡概率决定是否使用纯致命事件(key=3)
+    if (Math.random() < deathProbability) {
+      actionType = 3;  // 使用纯致命事件
+    } else {
+      actionType = Math.random() < 0.5 ? 0 : 1;  // 在普通和混合事件间随机
+    }
   }
   
   const keys = Object.keys(actions[actionType]);
@@ -187,7 +229,7 @@ export function multiPersonAction(unactedTributes: Tribute[], phase: string) {
   let eventText = '';
   if (actionKey === 'raid' || actionKey === 'fend' || 
       actionKey === 'track' || actionKey === 'ambush' || 
-      actionKey === 'sacrifice') {
+      actionKey === 'sacrifice' || actionKey === 'gang') {
     const targetTribute = selectedTributes[selectedTributes.length - 1];
     const pronoun = targetTribute.gender === 'Male' ? 'he' : 'she';
     const possessive = targetTribute.gender === 'Male' ? 'his' : 'her';
@@ -205,11 +247,17 @@ export function multiPersonAction(unactedTributes: Tribute[], phase: string) {
     eventText = `${selectedTributes.map(t => t.name).join(', ')} ${actionValue}`;
   }
   
-  console.log(eventText);
   
-  events[phase].push(eventText);
+  const currentEvent = {
+    text: eventText,
+    tributes: selectedTributes.map(t => ({
+      name: t.name,
+      avatar: t.avatar
+    }))
+  };
+  events[phase].push(currentEvent);
   
-  updateTributeStatus(selectedTributes, 'multi', effect);
+  updateTributeStatus(selectedTributes, 'multi', effect, currentEvent);
   return markTributeAsActed(globalIndexes, unactedTributes);
 }
 
@@ -220,11 +268,8 @@ export function processAction(phase: string) {
   // 获取所有存活的参赛者
   const aliveTributes: Tribute[] = tributes.filter(tribute => tribute.status !== 'dead');
   
-  console.log('当前存活人数:', aliveTributes.length);
-  
   // 如果没有存活者，直接返回
   if (aliveTributes.length === 0) {
-    console.log('没有存活的参赛者');
     return;
   }
 
@@ -232,26 +277,32 @@ export function processAction(phase: string) {
   aliveTributes.forEach(tribute => tribute.hasActed = false);
   let unactedTributes = [...aliveTributes];
 
+  // 根据存活人数计算死亡事件概率系数
+  const deathProbabilityMultiplier = calculateDeathProbability(aliveTributes.length);
+
   // 循环直到所有tribute都行动完毕
   while (hasUnactedTributes(unactedTributes)) {
     const remainingCount = unactedTributes.length;
-    console.log('当前未行动人数:', remainingCount);
 
     let actionType: number;
 
     // 根据剩余人数决定可执行的行为类型
     if (remainingCount === 1) {
-      // 只剩1人时，直接执行单人行为
       actionType = 0;
     } else if (remainingCount <= 3) {
-      // 剩余2-3人时，随机执行单人或双人行为
-      actionType = Math.floor(Math.random() * 2); // 生成0或1
+      // 当存活人数较少时，提高选择双人事件的概率
+      actionType = Math.random() < deathProbabilityMultiplier ? 1 : 0;
     } else {
-      // 剩余>=4人时，可以执行所有类型的行为
-      actionType = Math.floor(Math.random() * 3); // 生成0-2之间的随机整数
+      // 存活人数>=4时，根据死亡概率系数调整各类型事件的概率
+      const rand = Math.random();
+      if (rand < deathProbabilityMultiplier * 0.4) { // 提高多人事件概率
+        actionType = 2;
+      } else if (rand < deathProbabilityMultiplier * 0.7) { // 提高双人事件概率
+        actionType = 1;
+      } else {
+        actionType = 0;
+      }
     }
-
-    //console.log('行为类型:', actionType);
 
     // 执行对应的行为
     switch (actionType) {
@@ -259,14 +310,27 @@ export function processAction(phase: string) {
         unactedTributes = singlePersonAction(unactedTributes, phase);
         break;
       case 1:
-        unactedTributes = twoPersonAction(unactedTributes, phase);
+        unactedTributes = twoPersonAction(unactedTributes, phase, deathProbabilityMultiplier);
         break;
       case 2:
-        unactedTributes = multiPersonAction(unactedTributes, phase);
+        unactedTributes = multiPersonAction(unactedTributes, phase, deathProbabilityMultiplier);
         break;
     }
   }
-  console.log('所有tribute都行动完毕');
-  console.log('当前所有阶段events', events);
-} 
+}
+
+/**
+ * 根据存活人数计算死亡事件概率系数
+ */
+function calculateDeathProbability(aliveCount: number): number {
+  if (aliveCount <= 3) {
+    return 0.9; // 剩余1-3人时，90%概率触发致命事件
+  } else if (aliveCount <= 6) {
+    return 0.7; // 剩余4-6人时，70%概率触发致命事件
+  } else if (aliveCount <= 10) {
+    return 0.5; // 剩余7-10人时，50%概率触发致命事件
+  } else {
+    return 0.3; // 超过10人时，保持30%的基础致命事件概率
+  }
+}
 

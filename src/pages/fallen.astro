@@ -30,22 +30,20 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-    import { dayCount, nightCount } from '../hunger/MainProcess';
 	function updateDisplay() {
 		const tributesData = JSON.parse(localStorage.getItem('tributes') || '[]');
 		const container = document.getElementById('tributes-container');
+        const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
+        const killEvents = JSON.parse(localStorage.getItem('killEvents') || '{}');
 		
-        console.log('dayCount:', dayCount);
-        console.log('nightCount:', nightCount);
 		if (!container) return;
 		
 		container.innerHTML = '';
 		
-		// 按district分组显示
-		for (let district = 1; district <= 12; district++) {
-			const districtTributes = tributesData.filter(t => 
-				t.name.includes(`District ${district}`)
-			);
+		// 直接遍历tributesData,每2个贡品为一组
+		for (let i = 0; i < tributesData.length; i += 2) {
+			const district = Math.floor(i/2) + 1;
+			const districtTributes = tributesData.slice(i, i + 2);
 
 			const districtDiv = document.createElement('div');
 			districtDiv.className = 'bg-purple-50 p-6 rounded-lg';
@@ -63,7 +61,7 @@ import Layout from '../layouts/Layout.astro';
 				avatar.src = tribute.avatar;
 				avatar.className = 'w-12 h-12 rounded-full';
 				avatar.alt = tribute.name;
-				tributeDiv.appendChild(avatar);
+				tributeDiv.appendChild(avatar); 
 
 				const infoDiv = document.createElement('div');
 				infoDiv.className = 'flex-1';

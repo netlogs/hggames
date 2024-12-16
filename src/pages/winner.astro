@@ -13,41 +13,29 @@ import Layout from '../layouts/Layout.astro';
 				<!-- 将在客户端填充 -->
 			</div>
 
-			<!-- 使用<a>标签替代button -->
-			<div class="fixed bottom-8 left-0 right-0 flex justify-center">
-				<a
-					href="/"
-					class="bg-primary hover:bg-primary/80 text-white font-bold py-3 px-8 rounded-lg transition-colors cursor-pointer"
-					onclick="localStorage.clear()"
+			<div class="mt-12 mb-8">
+				<button
+					id="summaryButton"
+					class="inline-block px-8 py-3 bg-purple-800 hover:bg-purple-900 text-white rounded-lg transition-colors cursor-pointer"
 				>
-					Restart Simulation
-				</a>
+					Summary
+				</button>
 			</div>
 		</div>
 	</main>
 </Layout>
 
 <script>
+    import { tributes } from '../hunger/MainProcess';
+    import { loadGameState } from '../hunger/MainProcess';
 	function displayWinner() {
 		// 获取并记录所有游戏状态
 		const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
 		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
-		const currentPhase = localStorage.getItem('currentPhase');
-		
-		console.log('=== Winner Page Debug Info ===');
-		console.log('Current Phase:', currentPhase);
-		console.log('All Events:', events);
-		console.log('All Tributes:', tributes);
-		console.log('Alive Tributes:', tributes.filter(t => t.status !== 'dead'));
-		console.log('Dead Tributes:', tributes.filter(t => t.status === 'dead'));
-		console.log('Tribute Status Count:', {
-			total: tributes.length,
-			alive: tributes.filter(t => t.status !== 'dead').length,
-			dead: tributes.filter(t => t.status === 'dead').length
-		});
-		
+        const killEvents = JSON.parse(localStorage.getItem('killEvents') || '{}');
+
+
 		const winner = tributes.find(t => t.status !== 'dead');
-		console.log('Found Winner:', winner);
 		
 		const container = document.getElementById('winner-container');
 		
@@ -66,7 +54,20 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 
-	// 页面加载时显示获胜者
+	// 页面加载时显示获胜者);
+
+	// 添加Summary按钮的点击处理
+	document.getElementById('summaryButton')?.addEventListener('click', async () => {
+		const { updateGameState } = await import('../hunger/MainProcess');
+		
+        loadGameState();
+		// 先保存状态
+		updateGameState();
+		
+		// 然后跳转
+		window.location.href = '/summary';
+	});
+
 	displayWinner();
 </script>
 

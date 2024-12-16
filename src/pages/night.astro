@@ -32,21 +32,15 @@ import Layout from '../layouts/Layout.astro';
 <script>
     import { dayCount, nightCount } from '../hunger/MainProcess';
 	function updateDisplay() {
-		console.log('Updating night display...');
 		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
 		const currentPhase = localStorage.getItem('currentPhase') || '';
 		
-		console.log('Current phase:', currentPhase);
-		console.log('Events:', events);
-        console.log('dayCount:', dayCount);
-        console.log('nightCount:', nightCount);
 		
 		// 更新标题
 		const phaseTitle = document.getElementById('phase-title');
 		if (phaseTitle) {
 			const nightNumber = currentPhase.match(/\d+/)?.[0] || '1';
 			phaseTitle.textContent = `Night ${nightNumber}`;
-			console.log('Updated phase title to:', `Night ${nightNumber}`);
 		} else {
 			console.error('Phase title element not found');
 		}
@@ -55,19 +49,34 @@ import Layout from '../layouts/Layout.astro';
 		const container = document.getElementById('events-container');
 		if (container && events[currentPhase]) {
 			container.innerHTML = '';
-			console.log('Displaying events for phase:', currentPhase);
-			console.log('Events to display:', events[currentPhase]);
 			
 			events[currentPhase].forEach(event => {
+				const eventDiv = document.createElement('div');
+				eventDiv.className = 'mb-6';
+
+				// 添加头像
+				const avatarsDiv = document.createElement('div');
+				avatarsDiv.className = 'flex justify-center gap-6 mb-3';
+				event.tributes.forEach(tribute => {
+					const img = document.createElement('img');
+					img.src = tribute.avatar;
+					img.alt = tribute.name;
+					img.className = 'w-16 h-16 rounded-full border-2 border-gray-200 hover:border-blue-500 transition-colors cursor-pointer';
+					img.title = tribute.name;
+					avatarsDiv.appendChild(img);
+				});
+				eventDiv.appendChild(avatarsDiv);
+
+				// 添加事件文本
 				const p = document.createElement('p');
-				p.textContent = event;
-				p.className = 'text-lg text-gray-700 bg-blue-50 p-4 rounded-lg';
-				container.appendChild(p);
+				p.textContent = event.text;
+				p.className = 'text-base text-gray-700 bg-blue-50 p-3 rounded-lg';
+				eventDiv.appendChild(p);
+
+				container.appendChild(eventDiv);
 			});
 		} else {
 			console.error('Events container not found or no events for current phase');
-			console.log('Container:', container);
-			console.log('Events for phase:', events[currentPhase]);
 		}
 	}
 

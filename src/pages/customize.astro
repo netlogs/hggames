@@ -1,0 +1,226 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { initializeGameData, tributes } from '../hunger/MainProcess';
+
+// 初始化游戏数据
+initializeGameData();
+
+// 创建districts数组
+const districts = Array(12).fill(null).map((_, i) => ({
+  number: i + 1,
+  tributes: [i * 2, i * 2 + 1]
+}));
+
+// 将初始数据序列化后注入
+const initialTributes = JSON.stringify(tributes);
+---
+
+<!-- 在 head 中注入初始数据 -->
+<script define:vars={{initialTributes}}>
+    localStorage.setItem('tributes', initialTributes);
+</script>
+
+<Layout title="Customize Tributes">
+  <main class="container mx-auto px-4 py-8 pt-20">
+    <h1 class="text-4xl font-bold text-center mb-12 text-white">
+      Customize Tributes
+    </h1>
+
+    <div class="max-w-6xl mx-auto">
+      {districts.map((district, index) => (
+        index % 3 === 0 && (
+          <div class="mb-8">
+            <div class="grid grid-cols-6 gap-4">
+              {districts.slice(index, index + 3).map(d => (
+                <div class="col-span-2">
+                  <h2 class="text-2xl font-semibold text-center mb-4 text-white">
+                    District {d.number}
+                  </h2>
+                  <div class="grid grid-cols-2 gap-4">
+                    {d.tributes.map(tributeIndex => (
+                      <div class="bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex flex-col items-center space-y-4">
+                          {/* 头像部分 */}
+                          <div class="relative">
+                            <img
+                              src={tributes[tributeIndex].avatar}
+                              alt={tributes[tributeIndex].name}
+                              class="w-32 h-32 rounded-full object-cover border-4 border-gray-700"
+                            />
+                          </div>
+
+                          {/* 头像输入框 */}
+                          <div class="w-full">
+                            <input 
+                              type="text" 
+                              class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400"
+                              placeholder="Enter imgur URL or leave blank for default"
+                              data-tribute-index={tributeIndex}
+                              data-field="avatar"
+                            />
+                          </div>
+
+                          {/* 名字输入框 */}
+                          <div class="w-full">
+                            <input 
+                              type="text"
+                              value={tributes[tributeIndex].name}
+                              class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-center font-semibold text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400"
+                              placeholder="Enter tribute name..."
+                              data-tribute-index={tributeIndex}
+                              data-field="name"
+                            />
+                          </div>
+
+                          {/* 新的性别选择器 */}
+                          <div class="w-full">
+                            <div class="gender-selector bg-gray-700 p-1 rounded-lg flex justify-center" data-tribute-index={tributeIndex}>
+                              <button 
+                                class={`gender-btn flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${tributes[tributeIndex].gender === 'Male' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
+                                data-gender="Male"
+                              >
+                                Male
+                              </button>
+                              <button 
+                                class={`gender-btn flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${tributes[tributeIndex].gender === 'Female' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
+                                data-gender="Female"
+                              >
+                                Female
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      ))}
+    </div>
+
+    <div class="mt-12 mb-8 text-center">
+      <button
+        id="proceedButton"
+        class="inline-block px-8 py-3 bg-primary hover:bg-primary/80 text-white font-bold rounded-lg transition-colors"
+      >
+        Proceed
+      </button>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { tributes } from '../hunger/MainProcess';
+// 页面加载时初始化localStorage
+document.addEventListener('DOMContentLoaded', async () => {
+  // 如果localStorage中没有tributes数据，则初始化
+  //if (!localStorage.getItem('tributes')) {
+  //  const { initializeGameData } = await import('../hunger/MainProcess');
+  //  initializeGameData();
+  //  // 将初始化的数据保存到localStorage
+  //  const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
+  //  localStorage.setItem('tributes', JSON.stringify(tributes));
+  //}
+
+  //after change
+  const localtributes = JSON.parse(localStorage.getItem('tributes') || '[]');
+});
+
+// 处理名字输入
+document.querySelectorAll('input[data-field="name"]').forEach(input => {
+  input.addEventListener('change', (e) => {
+    const target = e.target as HTMLInputElement;
+    const tributeIndex = parseInt(target.dataset.tributeIndex || '0');
+    const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
+    
+    // 只更新 name 字段,保留其他字段的现有值
+    tributes[tributeIndex] = {
+      ...tributes[tributeIndex], // 保留现有的所有字段
+      name: target.value
+    };
+    
+    localStorage.setItem('tributes', JSON.stringify(tributes));
+  });
+});
+
+// 处理头像输入
+document.querySelectorAll('input[data-field="avatar"]').forEach(input => {
+  input.addEventListener('change', (e) => {
+    const target = e.target as HTMLInputElement;
+    const tributeIndex = parseInt(target.dataset.tributeIndex || '0');
+    const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
+    
+    // 只在有新值时更新 avatar 字段
+    tributes[tributeIndex] = {
+      ...tributes[tributeIndex], // 保留现有的所有字段
+      avatar: target.value || tributes[tributeIndex].avatar
+    };
+    
+    localStorage.setItem('tributes', JSON.stringify(tributes));
+  });
+});
+
+// 处理性别选择
+document.querySelectorAll('.gender-selector').forEach(selector => {
+  selector.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.classList.contains('gender-btn')) return;
+    
+    const container = target.closest('.gender-selector') as HTMLElement;
+    const tributeIndex = parseInt(container.dataset.tributeIndex || '0');
+    const gender = target.dataset.gender as string;
+    
+    // 更新数据
+    const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
+    tributes[tributeIndex] = {
+      ...tributes[tributeIndex],
+      gender: gender
+    };
+    localStorage.setItem('tributes', JSON.stringify(tributes));
+
+    // 更新UI
+    container.querySelectorAll('.gender-btn').forEach(btn => {
+      const isSelected = (btn as HTMLElement).dataset.gender === gender;
+      btn.classList.toggle('bg-gray-900', isSelected);
+      btn.classList.toggle('text-white', isSelected);
+      btn.classList.toggle('shadow-sm', isSelected);
+      btn.classList.toggle('text-gray-400', !isSelected);
+    });
+  });
+});
+
+// 添加Proceed按钮事件处理
+document.getElementById('proceedButton')?.addEventListener('click', async () => {
+  const { processGamePhase, initGame } = await import('../hunger/GameFlow');
+  const { updateTributes, loadGameState, updateGameState } = await import('../hunger/MainProcess');
+
+  const customTributes = JSON.parse(localStorage.getItem('tributes') || '[]');
+  updateTributes(customTributes);
+  
+  initGame();
+
+  // 4. 开始游戏流程
+  await processGamePhase();
+});
+</script>
+
+<style>
+  main {
+    min-height: 100vh;
+  }
+
+  input::placeholder {
+    color: #9CA3AF;
+  }
+
+  .gender-selector {
+    backdrop-filter: blur(8px);
+  }
+
+  .gender-btn {
+    user-select: none;
+  }
+</style>

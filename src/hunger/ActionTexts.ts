@@ -62,6 +62,20 @@ export const twoPersonActions = {
       text: "'s weapon while he is distracted.",
       effect: { target: 'normal' }
     }
+  },
+  3: {
+    overpowers: {
+      text: ', killing him.',
+      effect: { target: 'death' }
+    },
+    snaps: {
+      text: "'s neck.",
+      effect: { target: 'death' }
+    },
+    throws: {
+      text: ' a knife into his chest.',
+      effect: { target: 'death' }
+    }
   }
 };
 
@@ -89,17 +103,35 @@ export const multiPersonActions = {
       text: 'get into a fight. {winner} triumphantly kills them all.',
       effect: { winner: 'normal', others: 'death' }
     },
-    drown: {
-      text: 'work together to drown {target}.',
+    betray: {
+      text: 'turn on each other in the darkness. Only {winner} survives.',
+      effect: { winner: 'normal', others: 'death' }
+    },
+    gang: {
+      text: 'gang up on {target} and kill {pronoun}.',
       effect: { target: 'death', others: 'normal' }
     },
     fend: {
-      text: 'fends {others} away from {possessive} fire.',
+      text: 'fends others away from {possessive} fire.',
       effect: { target: 'normal', others: 'injured' }
     },
     discuss: {
       text: 'discuss the games and what might happen in the morning.',
       effect: { others: 'normal' }
+    }
+  },
+  3: {
+    fight: {
+      text: 'get into a fight. {winner} triumphantly kills them all.',
+      effect: { winner: 'normal', others: 'death' }
+    },
+    betray: {
+      text: 'turn on each other in the darkness. Only {winner} survives.',
+      effect: { winner: 'normal', others: 'death' }
+    },
+    gang: {
+      text: 'gang up on {target} and kill {pronoun}.',
+      effect: { target: 'death', others: 'normal' }
     }
   }
 };

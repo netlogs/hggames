@@ -33,14 +33,34 @@ import Layout from '../layouts/Layout.astro';
 	function updateDisplay() {
 		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
 		const container = document.getElementById('events-container');
+        const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
 		
 		if (container && events['The Bloodbath']) {
 			container.innerHTML = '';
 			events['The Bloodbath'].forEach(event => {
+				const eventDiv = document.createElement('div');
+				eventDiv.className = 'mb-6';
+
+				// 添加头像
+				const avatarsDiv = document.createElement('div');
+				avatarsDiv.className = 'flex justify-center gap-6 mb-3';
+				event.tributes.forEach(tribute => {
+					const img = document.createElement('img');
+					img.src = tribute.avatar;
+					img.alt = tribute.name;
+					img.className = 'w-16 h-16 rounded-full border-2 border-gray-200 hover:border-red-500 transition-colors cursor-pointer';
+					img.title = tribute.name;
+					avatarsDiv.appendChild(img);
+				});
+				eventDiv.appendChild(avatarsDiv);
+
+				// 添加事件文本
 				const p = document.createElement('p');
-				p.textContent = event;
-				p.className = 'text-lg text-gray-700 bg-red-50 p-4 rounded-lg';
-				container.appendChild(p);
+				p.textContent = event.text;
+				p.className = 'text-base text-gray-700 bg-red-50 p-3 rounded-lg';
+				eventDiv.appendChild(p);
+
+				container.appendChild(eventDiv);
 			});
 		}
 	}

@@ -1,0 +1,125 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Game Summary">
+	<main class="container mx-auto px-4 py-8 pt-20">
+		<div class="text-center space-y-6">
+			<h1 class="text-4xl font-bold text-purple-800">
+				Game Summary
+			</h1>
+
+			<p class="text-xl text-gray-600 italic">
+				A record of all fallen tributes throughout the games.
+			</p>
+
+			<div class="mt-8 space-y-6" id="summary-container">
+				<!-- 将在客户端填充 -->
+			</div>
+
+			<div class="mt-12 mb-8">
+				<button
+					id="returnButton"
+					class="inline-block px-8 py-3 bg-purple-800 hover:bg-purple-900 text-white rounded-lg transition-colors cursor-pointer"
+				>
+					Return to Reaping
+				</button>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<script>
+    import { loadGameState } from '../hunger/MainProcess';
+	function formatPhaseName(phase: string): string {
+		if (phase === 'The Bloodbath') return phase;
+		
+		const type = phase.includes('day') ? 'Day' : 'Night';
+		const number = phase.match(/\d+/)?.[0] || '';
+		return `${type} ${number}`;
+	}
+
+	function updateDisplay() {
+		const killEvents = JSON.parse(localStorage.getItem('killEvents') || '{}');
+		const container = document.getElementById('summary-container');
+		
+        const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
+		if (!container) return;
+		
+		// 获取所有phase并排序
+		const phases = Object.keys(killEvents).sort((a, b) => {
+			if (a === 'The Bloodbath') return -1;
+			if (b === 'The Bloodbath') return 1;
+			
+			const aNum = parseInt(a.match(/\d+/)?.[0] || '0');
+			const bNum = parseInt(b.match(/\d+/)?.[0] || '0');
+			
+			if (a.includes('day') && b.includes('day')) return aNum - bNum;
+			if (a.includes('night') && b.includes('night')) return aNum - bNum;
+			if (a.includes('day')) return -1;
+			return 1;
+		});
+
+		container.innerHTML = '';
+		
+		phases.forEach(phase => {
+			if (killEvents[phase].length === 0) return; // 跳过没有击杀事件的阶段
+			
+			const phaseDiv = document.createElement('div');
+			phaseDiv.className = 'bg-purple-50 p-6 rounded-lg transition-all hover:shadow-lg';
+			
+			const phaseTitle = document.createElement('h2');
+			phaseTitle.className = 'text-2xl font-bold mb-4 text-purple-800';
+			phaseTitle.textContent = formatPhaseName(phase);
+			phaseDiv.appendChild(phaseTitle);
+
+			const eventsList = document.createElement('div');
+			eventsList.className = 'space-y-3';
+			
+			killEvents[phase].forEach(event => {
+				const eventDiv = document.createElement('div');
+				eventDiv.className = 'flex items-center gap-4 bg-white p-4 rounded-lg';
+
+				// 添加头像
+				const avatarsDiv = document.createElement('div');
+				avatarsDiv.className = 'flex -space-x-2';
+				event.tributes.forEach(tribute => {
+					const avatar = document.createElement('img');
+					avatar.src = tribute.avatar;
+					avatar.alt = tribute.name;
+					avatar.className = 'w-8 h-8 rounded-full border-2 border-white';
+					avatar.title = tribute.name;
+					avatarsDiv.appendChild(avatar);
+				});
+				eventDiv.appendChild(avatarsDiv);
+
+				// 添加事件文本
+				const text = document.createElement('p');
+				text.className = 'flex-1 text-gray-700';
+				text.textContent = event.text;
+				eventDiv.appendChild(text);
+
+				eventsList.appendChild(eventDiv);
+			});
+			
+			phaseDiv.appendChild(eventsList);
+			container.appendChild(phaseDiv);
+		});
+	}
+
+    loadGameState();
+	updateDisplay();
+	window.addEventListener('storage', updateDisplay);
+
+	// 添加Return按钮的点击处理
+	document.getElementById('returnButton')?.addEventListener('click', () => {
+		localStorage.clear();
+		window.location.href = '/reaping';
+	});
+</script>
+
+<style>
+	main {
+		min-height: 100vh;
+	}
+</style>
