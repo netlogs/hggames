@@ -10,7 +10,43 @@ import Layout from '../layouts/Layout.astro';
 			</h1>
 
 			<div class="mt-8 space-y-4" id="winner-container">
-				<!-- 将在客户端填充 -->
+				<!-- 添加默认内容 -->
+				<div id="default-content" class="hidden">
+					<p class="text-xl text-gray-600 mb-4">
+						No victor has been determined yet.
+					</p>
+					<p class="text-gray-500 mb-8">
+						The victor page displays the last tribute standing and their achievements in the games.
+					</p>
+                    <p class="text-gray-500 mb-8">
+                        'Ladies and gentlemen, I present the victor of The Hunger Games!' Only one tribute can emerge victorious from the arena, following in the footsteps of legendary victors like Katniss Everdeen.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        This page reveals the Games' victor, but you must complete a session to see who claims the crown.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Due to the content and themes present in this Hunger Games simulation, participants must be at least 13 years old to play independently.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Players under 13 may participate only with parent or guardian supervision, given the simulation's depiction of conflict.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Please note that this is a work of fictional entertainment. All simulated events are purely random and should not be interpreted as promoting real violence.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        This simulator draws inspiration from Suzanne Collins' Hunger Games literary series. We respect intellectual property rights and will promptly address any copyright concerns. Please direct any related inquiries to Cepistle.
+                    </p>
+                    <p class="text-gray-500 mb-8">By proceeding with the simulation, you acknowledge and agree to these conditions.</p>
+                    <p class="text-gray-500 mb-8">Please confirm one of the following:</p>
+                    <p class="text-gray-500 mb-8">1. I am 13+ years old and accept these terms</p>
+                    <p class="text-gray-500 mb-8">2. I am under 13 with parental supervision and accept these terms</p>
+					<a href="/" class="inline-flex items-center text-purple-800 hover:text-purple-900">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+						</svg>
+						Return to Start
+					</a>
+				</div>
 			</div>
 
 			<div class="mt-12 mb-8">
@@ -38,8 +74,12 @@ import Layout from '../layouts/Layout.astro';
 		const winner = tributes.find(t => t.status !== 'dead');
 		
 		const container = document.getElementById('winner-container');
+		const defaultContent = document.getElementById('default-content');
+		const summaryButton = document.getElementById('summaryButton');
 		
 		if (container && winner) {
+			defaultContent.classList.add('hidden');
+			summaryButton.classList.remove('hidden');
 			container.innerHTML = `
 				<div class="bg-primary/10 p-8 rounded-lg">
 					<img src="${winner.avatar}" alt="${winner.name}" class="w-32 h-32 rounded-full mx-auto mb-4">
@@ -48,6 +88,8 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 			`;
 		} else {
+			defaultContent.classList.remove('hidden');
+			summaryButton.classList.add('hidden');
 			console.error('Error: No winner found or container missing');
 			if (!container) console.error('Winner container element not found');
 			if (!winner) console.error('No surviving tribute found');

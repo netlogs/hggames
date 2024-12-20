@@ -14,7 +14,43 @@ import Layout from '../layouts/Layout.astro';
 			</p>
 
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8" id="tributes-container">
-				<!-- 将在客户端填充 -->
+				<!-- 添加默认内容 -->
+				<div id="default-content" class="hidden col-span-full text-center">
+					<p class="text-xl text-gray-600 mb-4">
+						No fallen tributes to display.
+					</p>
+					<p class="text-gray-500 mb-8">
+						This page honors the tributes who have fallen during the games.
+					</p>
+                    <p class="text-gray-500 mb-8">
+                        Each night, the anthem plays and the faces of the fallen appear in the sky. Like Katniss's moment of reflection for Rue, this page honors those who have fallen in the arena.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        This page displays tributes who have fallen during the Games, but you'll need to start a session to see these memorial updates.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Due to the content and themes present in this Hunger Games simulation, participants must be at least 13 years old to play independently.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Players under 13 may participate only with parent or guardian supervision, given the simulation's depiction of conflict.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Please note that this is a work of fictional entertainment. All simulated events are purely random and should not be interpreted as promoting real violence.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        This simulator draws inspiration from Suzanne Collins' Hunger Games literary series. We respect intellectual property rights and will promptly address any copyright concerns. Please direct any related inquiries to Cepistle.
+                    </p>
+                    <p class="text-gray-500 mb-8">By proceeding with the simulation, you acknowledge and agree to these conditions.</p>
+                    <p class="text-gray-500 mb-8">Please confirm one of the following:</p>
+                    <p class="text-gray-500 mb-8">1. I am 13+ years old and accept these terms</p>
+                    <p class="text-gray-500 mb-8">2. I am under 13 with parental supervision and accept these terms</p>
+					<a href="/" class="inline-flex items-center text-purple-800 hover:text-purple-900">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+						</svg>
+						Return to Start
+					</a>
+				</div>
 			</div>
 
 			<div class="mt-8">
@@ -33,54 +69,66 @@ import Layout from '../layouts/Layout.astro';
 	function updateDisplay() {
 		const tributesData = JSON.parse(localStorage.getItem('tributes') || '[]');
 		const container = document.getElementById('tributes-container');
-        const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
-        const killEvents = JSON.parse(localStorage.getItem('killEvents') || '{}');
+		const defaultContent = document.getElementById('default-content');
+		const proceedButton = document.getElementById('proceedButton');
+		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
+		const killEvents = JSON.parse(localStorage.getItem('killEvents') || '{}');
 		
 		if (!container) return;
 		
-		container.innerHTML = '';
+		// 检查是否有阵亡贡品
+		const hasFallen = tributesData.some(tribute => tribute.status === 'dead');
 		
-		// 直接遍历tributesData,每2个贡品为一组
-		for (let i = 0; i < tributesData.length; i += 2) {
-			const district = Math.floor(i/2) + 1;
-			const districtTributes = tributesData.slice(i, i + 2);
-
-			const districtDiv = document.createElement('div');
-			districtDiv.className = 'bg-purple-50 p-6 rounded-lg';
+		if (hasFallen) {
+			defaultContent.classList.add('hidden');
+			proceedButton.classList.remove('hidden');
+			container.innerHTML = '';
 			
-			const districtTitle = document.createElement('h2');
-			districtTitle.className = 'text-xl font-bold mb-4 text-purple-800';
-			districtTitle.textContent = `District ${district}`;
-			districtDiv.appendChild(districtTitle);
+			// 直接遍历tributesData,每2个贡品为一组
+			for (let i = 0; i < tributesData.length; i += 2) {
+				const district = Math.floor(i/2) + 1;
+				const districtTributes = tributesData.slice(i, i + 2);
 
-			districtTributes.forEach(tribute => {
-				const tributeDiv = document.createElement('div');
-				tributeDiv.className = 'flex items-center gap-4 mb-4';
+				const districtDiv = document.createElement('div');
+				districtDiv.className = 'bg-purple-50 p-6 rounded-lg';
+				
+				const districtTitle = document.createElement('h2');
+				districtTitle.className = 'text-xl font-bold mb-4 text-purple-800';
+				districtTitle.textContent = `District ${district}`;
+				districtDiv.appendChild(districtTitle);
 
-				const avatar = document.createElement('img');
-				avatar.src = tribute.avatar;
-				avatar.className = 'w-12 h-12 rounded-full';
-				avatar.alt = tribute.name;
-				tributeDiv.appendChild(avatar); 
+				districtTributes.forEach(tribute => {
+					const tributeDiv = document.createElement('div');
+					tributeDiv.className = 'flex items-center gap-4 mb-4';
 
-				const infoDiv = document.createElement('div');
-				infoDiv.className = 'flex-1';
+					const avatar = document.createElement('img');
+					avatar.src = tribute.avatar;
+					avatar.className = 'w-12 h-12 rounded-full';
+					avatar.alt = tribute.name;
+					tributeDiv.appendChild(avatar); 
 
-				const name = document.createElement('div');
-				name.className = `font-semibold ${tribute.status === 'dead' ? 'text-red-600 line-through' : 'text-gray-800'}`;
-				name.textContent = tribute.name;
-				infoDiv.appendChild(name);
+					const infoDiv = document.createElement('div');
+					infoDiv.className = 'flex-1';
 
-				const stats = document.createElement('div');
-				stats.className = 'text-sm text-gray-600';
-				stats.textContent = `Kills: ${tribute.killnum}`;
-				infoDiv.appendChild(stats);
+					const name = document.createElement('div');
+					name.className = `font-semibold ${tribute.status === 'dead' ? 'text-red-600 line-through' : 'text-gray-800'}`;
+					name.textContent = tribute.name;
+					infoDiv.appendChild(name);
 
-				tributeDiv.appendChild(infoDiv);
-				districtDiv.appendChild(tributeDiv);
-			});
+					const stats = document.createElement('div');
+					stats.className = 'text-sm text-gray-600';
+					stats.textContent = `Kills: ${tribute.killnum}`;
+					infoDiv.appendChild(stats);
 
-			container.appendChild(districtDiv);
+					tributeDiv.appendChild(infoDiv);
+					districtDiv.appendChild(tributeDiv);
+				});
+
+				container.appendChild(districtDiv);
+			}
+		} else {
+			defaultContent.classList.remove('hidden');
+			proceedButton.classList.add('hidden');
 		}
 	}
 

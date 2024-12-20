@@ -14,7 +14,43 @@ import Layout from '../layouts/Layout.astro';
 			</p>
 
 			<div class="mt-8 space-y-6" id="summary-container">
-				<!-- 将在客户端填充 -->
+				<!-- 添加默认内容 -->
+				<div id="default-content" class="hidden">
+					<p class="text-xl text-gray-600 mb-4">
+						No game records available.
+					</p>
+					<p class="text-gray-500 mb-8">
+						The summary page displays a chronological record of all fallen tributes throughout the games.
+					</p>
+                    <p class="text-gray-500 mb-8">
+                        Every Game tells a story - of alliances formed and broken, of survival against odds, of triumph and sacrifice. Like Caesar Flickerman's recap, this summary captures every crucial moment of the Games.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        This page provides a complete overview of the Games' events, but you'll need to participate first to see how your story unfolds.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Due to the content and themes present in this Hunger Games simulation, participants must be at least 13 years old to play independently.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Players under 13 may participate only with parent or guardian supervision, given the simulation's depiction of conflict.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Please note that this is a work of fictional entertainment. All simulated events are purely random and should not be interpreted as promoting real violence.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        This simulator draws inspiration from Suzanne Collins' Hunger Games literary series. We respect intellectual property rights and will promptly address any copyright concerns. Please direct any related inquiries to Cepistle.
+                    </p>
+                    <p class="text-gray-500 mb-8">By proceeding with the simulation, you acknowledge and agree to these conditions.</p>
+                    <p class="text-gray-500 mb-8">Please confirm one of the following:</p>
+                    <p class="text-gray-500 mb-8">1. I am 13+ years old and accept these terms</p>
+                    <p class="text-gray-500 mb-8">2. I am under 13 with parental supervision and accept these terms</p>
+					<a href="/" class="inline-flex items-center text-yellow-800 hover:text-yellow-900">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+						</svg>
+						Return to Start
+					</a>
+				</div>
 			</div>
 
 			<div class="mt-12 mb-8">
@@ -42,69 +78,81 @@ import Layout from '../layouts/Layout.astro';
 	function updateDisplay() {
 		const killEvents = JSON.parse(localStorage.getItem('killEvents') || '{}');
 		const container = document.getElementById('summary-container');
+		const defaultContent = document.getElementById('default-content');
+		const returnButton = document.getElementById('returnButton');
 		
-        const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
+		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
 		if (!container) return;
 		
-		// 获取所有phase并排序
-		const phases = Object.keys(killEvents).sort((a, b) => {
-			if (a === 'The Bloodbath') return -1;
-			if (b === 'The Bloodbath') return 1;
-			
-			const aNum = parseInt(a.match(/\d+/)?.[0] || '0');
-			const bNum = parseInt(b.match(/\d+/)?.[0] || '0');
-			
-			if (a.includes('day') && b.includes('day')) return aNum - bNum;
-			if (a.includes('night') && b.includes('night')) return aNum - bNum;
-			if (a.includes('day')) return -1;
-			return 1;
-		});
-
-		container.innerHTML = '';
+		// 检查是否有任何击杀事件
+		const hasEvents = Object.values(killEvents).some(phase => phase.length > 0);
 		
-		phases.forEach(phase => {
-			if (killEvents[phase].length === 0) return; // 跳过没有击杀事件的阶段
+		if (hasEvents) {
+			defaultContent.classList.add('hidden');
+			returnButton.classList.remove('hidden');
+			container.innerHTML = '';
 			
-			const phaseDiv = document.createElement('div');
-			phaseDiv.className = 'bg-purple-50 p-6 rounded-lg transition-all hover:shadow-lg';
-			
-			const phaseTitle = document.createElement('h2');
-			phaseTitle.className = 'text-2xl font-bold mb-4 text-purple-800';
-			phaseTitle.textContent = formatPhaseName(phase);
-			phaseDiv.appendChild(phaseTitle);
-
-			const eventsList = document.createElement('div');
-			eventsList.className = 'space-y-3';
-			
-			killEvents[phase].forEach(event => {
-				const eventDiv = document.createElement('div');
-				eventDiv.className = 'flex items-center gap-4 bg-white p-4 rounded-lg';
-
-				// 添加头像
-				const avatarsDiv = document.createElement('div');
-				avatarsDiv.className = 'flex -space-x-2';
-				event.tributes.forEach(tribute => {
-					const avatar = document.createElement('img');
-					avatar.src = tribute.avatar;
-					avatar.alt = tribute.name;
-					avatar.className = 'w-8 h-8 rounded-full border-2 border-white';
-					avatar.title = tribute.name;
-					avatarsDiv.appendChild(avatar);
-				});
-				eventDiv.appendChild(avatarsDiv);
-
-				// 添加事件文本
-				const text = document.createElement('p');
-				text.className = 'flex-1 text-gray-700';
-				text.textContent = event.text;
-				eventDiv.appendChild(text);
-
-				eventsList.appendChild(eventDiv);
+			// 获取所有phase并排序
+			const phases = Object.keys(killEvents).sort((a, b) => {
+				if (a === 'The Bloodbath') return -1;
+				if (b === 'The Bloodbath') return 1;
+				
+				const aNum = parseInt(a.match(/\d+/)?.[0] || '0');
+				const bNum = parseInt(b.match(/\d+/)?.[0] || '0');
+				
+				if (a.includes('day') && b.includes('day')) return aNum - bNum;
+				if (a.includes('night') && b.includes('night')) return aNum - bNum;
+				if (a.includes('day')) return -1;
+				return 1;
 			});
-			
-			phaseDiv.appendChild(eventsList);
-			container.appendChild(phaseDiv);
-		});
+
+			phases.forEach(phase => {
+				if (killEvents[phase].length === 0) return; // 跳过没有击杀事件的阶段
+				
+				const phaseDiv = document.createElement('div');
+				phaseDiv.className = 'bg-purple-50 p-6 rounded-lg transition-all hover:shadow-lg';
+				
+				const phaseTitle = document.createElement('h2');
+				phaseTitle.className = 'text-2xl font-bold mb-4 text-purple-800';
+				phaseTitle.textContent = formatPhaseName(phase);
+				phaseDiv.appendChild(phaseTitle);
+
+				const eventsList = document.createElement('div');
+				eventsList.className = 'space-y-3';
+				
+				killEvents[phase].forEach(event => {
+					const eventDiv = document.createElement('div');
+					eventDiv.className = 'flex items-center gap-4 bg-white p-4 rounded-lg';
+
+					// 添加头像
+					const avatarsDiv = document.createElement('div');
+					avatarsDiv.className = 'flex -space-x-2';
+					event.tributes.forEach(tribute => {
+						const avatar = document.createElement('img');
+						avatar.src = tribute.avatar;
+						avatar.alt = tribute.name;
+						avatar.className = 'w-8 h-8 rounded-full border-2 border-white';
+						avatar.title = tribute.name;
+						avatarsDiv.appendChild(avatar);
+					});
+					eventDiv.appendChild(avatarsDiv);
+
+					// 添加事件文本
+					const text = document.createElement('p');
+					text.className = 'flex-1 text-gray-700';
+					text.textContent = event.text;
+					eventDiv.appendChild(text);
+
+					eventsList.appendChild(eventDiv);
+				});
+				
+				phaseDiv.appendChild(eventsList);
+				container.appendChild(phaseDiv);
+			});
+		} else {
+			defaultContent.classList.remove('hidden');
+			returnButton.classList.add('hidden');
+		}
 	}
 
     loadGameState();

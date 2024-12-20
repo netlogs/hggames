@@ -14,7 +14,43 @@ import Layout from '../layouts/Layout.astro';
 			</p>
 
 			<div class="mt-8 space-y-4" id="events-container">
-				<!-- 将在客户端填充 -->
+				<!-- 添加默认内容 -->
+				<div id="default-content" class="hidden">
+					<p class="text-xl text-gray-600 mb-4">
+						The game has not started yet or the data has expired.
+					</p>
+					<p class="text-gray-500 mb-8">
+						Night phase is when tributes rest, form alliances, or hunt in darkness.
+					</p>
+                    <p class="text-gray-500 mb-8">
+                        The anthem plays as darkness falls. Night brings its own dangers - from other tributes hunting in the shadows to the Gamemakers' twisted surprises. Much like Rue and Katniss's strategy, some tributes find safety in the trees, while others hunt.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        This page reveals nighttime events in the arena, but you must begin the Games to view the tributes' nocturnal activities.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Due to the content and themes present in this Hunger Games simulation, participants must be at least 13 years old to play independently.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Players under 13 may participate only with parent or guardian supervision, given the simulation's depiction of conflict.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        Please note that this is a work of fictional entertainment. All simulated events are purely random and should not be interpreted as promoting real violence.
+                    </p>
+                    <p class="text-gray-500 mb-8">
+                        This simulator draws inspiration from Suzanne Collins' Hunger Games literary series. We respect intellectual property rights and will promptly address any copyright concerns. Please direct any related inquiries to Cepistle.
+                    </p>
+                    <p class="text-gray-500 mb-8">By proceeding with the simulation, you acknowledge and agree to these conditions.</p>
+                    <p class="text-gray-500 mb-8">Please confirm one of the following:</p>
+                    <p class="text-gray-500 mb-8">1. I am 13+ years old and accept these terms</p>
+                    <p class="text-gray-500 mb-8">2. I am under 13 with parental supervision and accept these terms</p>
+					<a href="/" class="inline-flex items-center text-blue-800 hover:text-blue-900">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+						</svg>
+						Return to Start
+					</a>
+				</div>
 			</div>
 
 			<div class="mt-8">
@@ -34,20 +70,21 @@ import Layout from '../layouts/Layout.astro';
 	function updateDisplay() {
 		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
 		const currentPhase = localStorage.getItem('currentPhase') || '';
-		
+		const container = document.getElementById('events-container');
+		const defaultContent = document.getElementById('default-content');
+		const proceedButton = document.getElementById('proceedButton');
 		
 		// 更新标题
 		const phaseTitle = document.getElementById('phase-title');
 		if (phaseTitle) {
 			const nightNumber = currentPhase.match(/\d+/)?.[0] || '1';
 			phaseTitle.textContent = `Night ${nightNumber}`;
-		} else {
-			console.error('Phase title element not found');
 		}
 
 		// 更新事件列表
-		const container = document.getElementById('events-container');
 		if (container && events[currentPhase]) {
+			defaultContent.classList.add('hidden');
+			proceedButton.classList.remove('hidden');
 			container.innerHTML = '';
 			
 			events[currentPhase].forEach(event => {
@@ -76,6 +113,8 @@ import Layout from '../layouts/Layout.astro';
 				container.appendChild(eventDiv);
 			});
 		} else {
+			defaultContent.classList.remove('hidden');
+			proceedButton.classList.add('hidden');
 			console.error('Events container not found or no events for current phase');
 		}
 	}

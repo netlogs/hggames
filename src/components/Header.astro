@@ -26,6 +26,7 @@ const navItems = [
         <a 
           href="/reaping"
           class="bg-primary hover:bg-primary-dark px-6 py-2 rounded-full font-semibold transition-colors"
+          id="start-simulation"
         >
           Start Simulation
         </a>
@@ -39,3 +40,14 @@ const navItems = [
     </nav>
   </div>
 </header>
+
+<script>
+  // 获取按钮元素
+  const startButton = document.getElementById('start-simulation');
+  
+  // 添加点击事件监听器
+  startButton?.addEventListener('click', (e) => {
+    // 清除localStorage
+    localStorage.clear();
+  });
+</script>
