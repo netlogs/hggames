@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="How to Add Custom Images - Hunger Games Simulator" 
+  description="Learn how to add and customize tribute images in the Hunger Games Simulator to create a more personalized gaming experience."
+>
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <h1 class="text-4xl font-display font-bold text-center mb-12 mt-8">
+      How to Add Custom Images to Hunger Games Simulator
+    </h1>
+    
+    <p class="text-center text-white/60 mb-16">
+      Last updated: {new Date().toLocaleDateString()}
+    </p>
+
+    <div class="space-y-12">
+      <!-- 介绍部分 -->
+      <div class="bg-secondary-light rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Introduction</h2>
+        <p class="text-white/80 mb-4">
+          Customizing tribute images can make your Hunger Games simulation more personal and engaging. This guide will walk you through the process of adding custom images for your tributes.
+        </p>
+      </div>
+
+      <!-- 步骤1 -->
+      <div class="bg-secondary-light rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Step 1: Prepare Your Images</h2>
+        <div class="space-y-4">
+          <p class="text-white/80">Before adding custom images, make sure your images meet these requirements:</p>
+          <ul class="list-disc list-inside space-y-2 text-white/80 ml-4">
+            <li>Square aspect ratio (1:1) recommended</li>
+            <li>File size under 2MB</li>
+            <li>Supported formats: JPG, PNG, WebP</li>
+            <li>Recommended resolution: 200x200 pixels</li>
+            <li>Upload your images to <a href="https://imgur.com/" class="text-primary hover:underline">Imgur</a> and get the direct URL</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 步骤2 -->
+      <div class="bg-secondary-light rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Step 2: Access the Customization Page</h2>
+        <div class="space-y-4">
+          <p class="text-white/80">To add custom images:</p>
+          <ol class="list-decimal list-inside space-y-2 text-white/80 ml-4">
+            <li>Start from the home page</li>
+            <li>Click "Start Hunger Games"</li>
+            <li>On the Reaping page, click "Customize Tribute"</li>
+            <li><a href="/customize" class="text-primary hover:underline">You can click here to go to the Customize Tribute page</a></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 步骤3 -->
+      <div class="bg-secondary-light rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Step 3: Add Your Images</h2>
+        <div class="space-y-4">
+          <p class="text-white/80">There are way to add custom images:</p>
+          
+          <h3 class="text-lg font-semibold text-primary mb-2">Method 1: Direct URL Input</h3>
+          <ul class="list-disc list-inside space-y-2 text-white/80 ml-4">
+            <li>Paste the imgur URL into the tribute's image field</li>
+            <li>The image will automatically update if the URL is valid</li>
+          </ul>
+
+        </div>
+      </div>
+
+      <!-- 注意事项 -->
+      <div class="bg-secondary-light rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Important Notes</h2>
+        <div class="space-y-4">
+          <ul class="list-disc list-inside space-y-2 text-white/80 ml-4">
+            <li>Make sure your image URLs are from reliable sources and permanently accessible</li>
+            <li>If an image fails to load, a default avatar will be used</li>
+            <li>Custom images are stored locally and will persist until you start a new game</li>
+            <li>Respect copyright and only use images you have permission to use</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 相关链接 -->
+      <div class="bg-secondary-light rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Related Links</h2>
+        <div class="space-y-4">
+          <ul class="list-disc list-inside space-y-2 text-white/80 ml-4">
+            <li>
+              <a href="/reaping" class="text-primary hover:underline">Start a New Game</a>
+            </li>
+            <li>
+              <a href="/customize" class="text-primary hover:underline">Customize Tributes</a>
+            </li>
+            <li>
+              <a href="https://x.com/liarpzu" class="text-primary hover:underline">Follow us on X for Updates</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout> 
