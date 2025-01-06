@@ -2,6 +2,7 @@ import type { Tribute } from './Tributes';
 import type { Events } from './Events';
 import { avatarLinks } from './AvatarLinks';
 import { processAction } from './ActionProcess';
+import { maleNames, femaleNames } from './TributeNames';
 
 export let tributes: Tribute[] = [];
 export let events: Events = {};
@@ -38,16 +39,23 @@ export function loadGameState() {
 
 export function initializeGameData() {
   // 初始化参赛者数据
-  tributes = Array(24).fill(null).map((_, index) => ({
-    name: `District ${Math.floor(index / 2) + 1} ${index % 2 === 0 ? 'Male' : 'Female'}`,
-    status: 'alive',
-    killnum: 0,
-    weapons: [],
-    items: [],
-    avatar: avatarLinks[index % avatarLinks.length],
-    gender: index % 2 === 0 ? 'Male' : 'Female',
-    hasActed: false
-  }));
+  tributes = Array(24).fill(null).map((_, index) => {
+    const gender = index % 2 === 0 ? 'Male' : 'Female';
+    const districtNumber = Math.floor(index / 2) + 1;
+    const nameIndex = Math.floor(index / 2); // 使用区号作为名字索引
+    const name = gender === 'Male' ? maleNames[nameIndex] : femaleNames[nameIndex];
+    
+    return {
+      name: `${name}`,
+      status: 'alive',
+      killnum: 0,
+      weapons: [],
+      items: [],
+      avatar: avatarLinks[index % avatarLinks.length],
+      gender: gender,
+      hasActed: false
+    };
+  });
 
   // 初始化事件数据
   events = {};

@@ -41,6 +41,9 @@ export async function processGamePhase() {
 
   // 根据当前页面决定下一步
   switch (currentPath) {
+    case '/':
+      window.location.href = '/bloodbath';
+      break;
     case '/reaping':
       window.location.href = '/bloodbath';
       break;

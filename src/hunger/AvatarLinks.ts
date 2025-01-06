@@ -19,8 +19,8 @@ export const avatarLinks = [
     'https://i.imgur.com/7jMPqM4.png',
     'https://i.imgur.com/oztDvTg.png',
     'https://i.imgur.com/KbnoUrw.png',
-    'https://i.imgur.com/jlpXUMP.png',
     'https://i.imgur.com/O9kgTfO.png',
+    'https://i.imgur.com/jlpXUMP.png',
     'https://i.imgur.com/bVM3cWg.png',
     'https://i.imgur.com/Ht7XO6T.png',
 ]; 
