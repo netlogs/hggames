@@ -12,61 +12,66 @@ const districts = Array(12).fill(null).map((_, i) => ({
 }));
 ---
 
-  <main class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold text-center mb-12 mt-8">
-      The Reaping
-    </h1>
-    <h1 class="text-3xl text-primary font-bold text-center mb-12 mt-8">
+<main class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 pt-20">
+    The Reaping
+  </h1>
+  <div class="text-center space-y-2 md:space-y-3 mb-6 md:mb-8">
+    <p class="text-gray-400 text-sm md:text-base">
+      Want to customize your tributes? Click below:
+    </p>
+    <h2 class="text-2xl md:text-3xl text-primary font-bold">
       <a href="/customize" class="hover:underline">
         Customize tribute
       </a>
-    </h1>
+    </h2>
+  </div>
 
-    <div class="max-w-6xl mx-auto">
-      {districts.map((district, index) => (
-        // 每3个district一行
-        index % 3 === 0 && (
-          <div class="mb-8">
-            <div class="grid grid-cols-6 gap-4">
-              {districts.slice(index, index + 3).map(d => (
-                <div class="col-span-2">
-                  <h2 class="text-2xl font-semibold text-center mb-2">
-                    District {d.number}
-                  </h2>
-                  <div class="grid grid-cols-2 gap-2">
-                    {d.tributes.map(tributeIndex => (
-                      <div class="flex flex-col items-center">
-                        <img
-                          src={tributes[tributeIndex].avatar}
-                          alt={`Tribute ${tributeIndex + 1}`}
-                          width="90"
-                          height="90"
-                          class="rounded-full mb-1"
-                        />
-                        <p class="font-semibold">
-                          {tributes[tributeIndex].name}
-                        </p>
-                        <p class="text-green-500">Alive</p>
-                      </div>
-                    ))}
-                  </div>
+  <div class="max-w-6xl mx-auto">
+    {districts.map((district, index) => (
+      // 每3个district一行
+      index % 3 === 0 && (
+        <div class="mb-4 md:mb-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {districts.slice(index, index + 3).map(d => (
+              <div class="col-span-1 bg-secondary/20 p-4 md:p-6 rounded-lg">
+                <h2 class="text-xl md:text-2xl font-semibold text-center mb-3 md:mb-4">
+                  District {d.number}
+                </h2>
+                <div class="grid grid-cols-2 gap-3 md:gap-4">
+                  {d.tributes.map(tributeIndex => (
+                    <div class="flex flex-col items-center space-y-2 md:space-y-3">
+                      <img
+                        src={tributes[tributeIndex].avatar}
+                        alt={`Tribute ${tributeIndex + 1}`}
+                        width="90"
+                        height="90"
+                        class="w-16 h-16 md:w-24 md:h-24 rounded-full object-cover border-2 border-gray-200"
+                      />
+                      <p class="font-semibold text-sm md:text-base text-center">
+                        {tributes[tributeIndex].name}
+                      </p>
+                      <p class="text-green-500 text-xs md:text-sm">Alive</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        )
-      ))}
-    </div>
+        </div>
+      )
+    ))}
+  </div>
 
-    <div class="flex justify-center mt-8">
-      <button
-        class="px-8 py-3 bg-primary hover:bg-primary-dark rounded-lg transition-colors"
-        id="proceedButton"
-      >
-        Proceed
-      </button>
-    </div>
-  </main>
+  <div class="flex justify-center mt-6 md:mt-8">
+    <button
+      class="w-full sm:w-auto px-6 md:px-8 py-2.5 md:py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg transition-colors"
+      id="proceedButton"
+    >
+      Proceed
+    </button>
+  </div>
+</main>
 
 <style>
   main {

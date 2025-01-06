@@ -1,8 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const faqs = [
+    {
+        question: "What is the Bloodbath?",
+        answer: "The games kick off with the infamous Cornucopia scramble! Watch as tributes make split-second decisions: Will they risk it all for supplies and weapons, or flee to safety? Every choice could mean survival or elimination."
+    },
+    {
+        question: "Why is there sometimes no content displayed?",
+        answer: "The game has not started yet or the data has expired. Please refresh the page or start a new game. Your current game data depends on your previous game flow to ensure that the game starts from the initial reaping."
+    },
+]
 ---
 
-<Layout title="The Bloodbath" description="Relive the intense opening moments of The Hunger Games simulation - the initial bloodbath at the Cornucopia where tributes fight for supplies and survival.">
+<Layout title="Hunger Games Simulator: The Cornucopia Bloodbath Begins" description="Watch the chaos unfold as tributes make their first crucial decisions at the Cornucopia. Who will grab supplies and weapons? Who will flee? Every choice shapes their fate in the arena.">
 	<main class="container mx-auto px-4 py-8 pt-20">
 		<div class="text-center space-y-6">
 			<h1 class="text-4xl font-bold text-red-800">
@@ -15,43 +26,6 @@ import Layout from '../layouts/Layout.astro';
 
 			<div class="mt-8 space-y-4" id="events-container">
 				<!-- 默认内容 -->
-				<div id="default-content" class="hidden">
-					<p class="text-xl text-gray-600 mb-4">
-						The game has not started yet or the data has expired.
-					</p>
-					<p class="text-gray-500 mb-8">
-						Bloodbath is the first phase of the Hunger Games. In this phase, the tributes will fight for survival.
-					</p>
-                    <p class="text-gray-500 mb-8">
-                        The first sixty seconds at the Cornucopia are often the deadliest.
-                    </p>
-                    <p class="text-gray-500 mb-8">
-                        As Haymitch advised: some will fall in the initial bloodbath as tributes fight for weapons and supplies, while others will wisely flee into the arena's wilderness.
-                    </p>
-
-                    <p class="text-gray-500 mb-8">
-                        Due to the content and themes present in this Hunger Games simulation, participants must be at least 13 years old to play independently.
-                    </p>
-                    <p class="text-gray-500 mb-8">
-                        Players under 13 may participate only with parent or guardian supervision, given the simulation's depiction of conflict.
-                    </p>
-                    <p class="text-gray-500 mb-8">
-                        Please note that this is a work of fictional entertainment. All simulated events are purely random and should not be interpreted as promoting real violence.
-                    </p>
-                    <p class="text-gray-500 mb-8">
-                        This simulator draws inspiration from Suzanne Collins' Hunger Games literary series. We respect intellectual property rights and will promptly address any copyright concerns. Please direct any related inquiries to Cepistle.
-                    </p>
-                    <p class="text-gray-500 mb-8">By proceeding with the simulation, you acknowledge and agree to these conditions.</p>
-                    <p class="text-gray-500 mb-8">Please confirm one of the following:</p>
-                    <p class="text-gray-500 mb-8">1. I am 13+ years old and accept these terms</p>
-                    <p class="text-gray-500 mb-8">2. I am under 13 with parental supervision and accept these terms</p>
-					<a href="/" class="inline-flex items-center text-red-800 hover:text-red-900">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-						</svg>
-						Return to Start
-					</a>
-				</div>
 			</div>
 
 			<div class="mt-8">
@@ -63,6 +37,16 @@ import Layout from '../layouts/Layout.astro';
 				</button>
 			</div>
 		</div>
+        <div class="max-w-3xl mx-auto">
+        <div class="space-y-6">
+            {faqs.map(faq => (
+            <div class="bg-secondary p-6 rounded-xl border border-white/10">
+                <h3 class="text-lg font-semibold mb-2">{faq.question}</h3>
+                <p class="text-white/70" set:html={faq.answer}></p>
+            </div>
+            ))}
+        </div>
+        </div>
 	</main>
 </Layout>
 
@@ -70,14 +54,12 @@ import Layout from '../layouts/Layout.astro';
 	function updateDisplay() {
 		const events = JSON.parse(localStorage.getItem('gameEvents') || '{}');
 		const container = document.getElementById('events-container');
-		const defaultContent = document.getElementById('default-content');
 		const proceedButton = document.getElementById('proceedButton');
-        const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
 		
 		if (container && events['The Bloodbath']) {
-			defaultContent.classList.add('hidden');
 			proceedButton.classList.remove('hidden');
 			container.innerHTML = '';
+			
 			events['The Bloodbath'].forEach(event => {
 				const eventDiv = document.createElement('div');
 				eventDiv.className = 'mb-6';
@@ -104,8 +86,8 @@ import Layout from '../layouts/Layout.astro';
 				container.appendChild(eventDiv);
 			});
 		} else {
-			defaultContent.classList.remove('hidden');
 			proceedButton.classList.add('hidden');
+			if (!container) console.error('Events container element not found');
 		}
 	}
 
