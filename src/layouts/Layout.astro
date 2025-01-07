@@ -44,19 +44,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
         ]
       }
     </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "SiteNavigationElement",
-        "name": [
-          "Start Hunger Games Simulator",
-          "Update Log"
-        ],
-        "url": [
-          "https://hungergame.cc/",
-        ]
-      }
-    </script>
   </head>
   <body class="bg-secondary text-white min-h-screen flex flex-col">
     <Header />
@@ -65,20 +52,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
     </main>
     <Footer />
     <div style="display: none;">
-      <!-- add google tag code here -->
       <!-- Google tag (gtag.js) -->
-      <script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-QNEG8P29EY"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {
-          dataLayer.push(arguments);
-        }
-        gtag("js", new Date());
-
-        gtag("config", "G-QNEG8P29EY");
-      </script>
     </div>
   </body>
 </html>
