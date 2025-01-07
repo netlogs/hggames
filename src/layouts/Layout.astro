@@ -11,6 +11,8 @@ const {
   title,
   description = "Experience the thrill of the Hunger Games through our advanced simulator. Create custom tributes, simulate battles, and witness epic survival stories unfold.",
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <!doctype html>
@@ -25,11 +27,10 @@ const {
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="canonical" href={canonicalURL} />
     <title>{title}</title>
 
     <!-- 添加 Google AdSense 脚本 -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9039440578960093"
-     crossorigin="anonymous"></script>
 
     <!-- 添加结构化数据 -->
     <script type="application/ld+json">
@@ -52,8 +53,7 @@ const {
           "Update Log"
         ],
         "url": [
-          "https://hungergame.cc/simulator",
-          "https://hungergame.cc/hunger-games-simulator-changelog"
+          "https://hungergame.cc/",
         ]
       }
     </script>
