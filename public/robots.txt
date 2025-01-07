@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://hungergame.cc/sitemap-index.xml
+Sitemap: https://www.hungergame.cc/sitemap-index.xml
