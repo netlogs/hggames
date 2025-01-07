@@ -9,37 +9,64 @@ const navItems = [
 
 <header class="fixed w-full bg-secondary/90 backdrop-blur-sm z-50">
   <div class="container mx-auto px-4 py-4">
-    <nav class="flex items-center justify-between">
-      <a href="/" class="text-2xl font-display font-bold text-primary">
-        Hunger Games Simulator
-      </a>
+    <nav class="relative">
+      <div class="flex items-center justify-between">
+        <a href="/" class="text-2xl font-display font-bold text-primary">
+          Hunger Games Simulator
+        </a>
+        
+        <div class="hidden md:flex items-center gap-8">
+          {navItems.map(item => (
+            <a 
+              href={item.href}
+              class="text-white/80 hover:text-primary transition-colors"
+            >
+              {item.label}
+            </a>
+          ))}
+          <a 
+            href="/"
+            class="bg-primary hover:bg-primary-dark px-6 py-2 rounded-full font-semibold transition-colors"
+            id="start-simulation"
+          >
+            Start Simulation
+          </a>
+        </div>
+
+        <label for="nav-toggle" class="md:hidden text-white cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </label>
+      </div>
+
+      <input type="checkbox" id="nav-toggle" class="hidden" />
       
-      <div class="hidden md:flex items-center gap-8">
+      <div class="nav-content absolute top-full left-0 right-0 bg-secondary/90 mt-2 p-4 rounded-lg hidden md:hidden">
         {navItems.map(item => (
           <a 
             href={item.href}
-            class="text-white/80 hover:text-primary transition-colors"
+            class="block text-white/80 hover:text-primary transition-colors py-2"
           >
             {item.label}
           </a>
         ))}
         <a 
           href="/"
-          class="bg-primary hover:bg-primary-dark px-6 py-2 rounded-full font-semibold transition-colors"
-          id="start-simulation"
+          class="block bg-primary hover:bg-primary-dark px-6 py-2 rounded-full font-semibold text-center transition-colors mt-4"
         >
           Start Simulation
         </a>
       </div>
-
-      <button class="md:hidden text-white">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-      </button>
     </nav>
   </div>
 </header>
+
+<style>
+  #nav-toggle:checked ~ .nav-content {
+    display: block;
+  }
+</style>
 
 <script>
   // 获取按钮元素
