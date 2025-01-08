@@ -17,14 +17,26 @@ const initialTributes = JSON.stringify(tributes);
 
 <!-- 在 head 中注入初始数据 -->
 <script define:vars={{initialTributes}}>
-    localStorage.setItem('tributes', initialTributes);
+    // 初始化时设置数据
+    if (!localStorage.getItem('tributes')) {
+        localStorage.setItem('tributes', initialTributes);
+    }
 </script>
 
 <Layout title="Customize Tributes">
   <main class="container mx-auto px-4 py-8 pt-20">
-    <h1 class="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-white">
+    <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 md:mb-6 text-white">
       Customize Tributes
     </h1>
+    
+    <div class="max-w-md mx-auto text-center mb-8 md:mb-12 space-y-2">
+      <p class="text-gray-400 text-sm md:text-base leading-relaxed">
+        After entering the Imgur avatar URL,
+      </p>
+      <p class="text-gray-400 text-sm md:text-base leading-relaxed">
+        click anywhere else to see the avatar update in real-time
+      </p>
+    </div>
 
     <div class="max-w-6xl mx-auto">
       {districts.map((district, index) => (
@@ -37,57 +49,61 @@ const initialTributes = JSON.stringify(tributes);
                     District {d.number}
                   </h2>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                    {d.tributes.map(tributeIndex => (
-                      <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex flex-col items-center space-y-3 md:space-y-4">
-                          <div class="relative">
-                            <img
-                              src={tributes[tributeIndex].avatar}
-                              alt={tributes[tributeIndex].name}
-                              class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-gray-700"
-                            />
-                          </div>
+                    {d.tributes.map(tributeIndex => {
+                      const tribute = tributes[tributeIndex];
+                      return (
+                        <div class="bg-gray-800 p-4 md:p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                          <div class="flex flex-col items-center space-y-3 md:space-y-4">
+                            <div class="relative">
+                              <img
+                                id={`tribute-img-${tributeIndex}`}
+                                src={tribute.avatar}
+                                alt={tribute.name}
+                                class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-gray-700"
+                              />
+                            </div>
 
-                          <div class="w-full">
-                            <input 
-                              type="text" 
-                              class="w-full px-2 md:px-3 py-1.5 md:py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400"
-                              placeholder="Enter imgur URL..."
-                              data-tribute-index={tributeIndex}
-                              data-field="avatar"
-                            />
-                          </div>
+                            <div class="w-full">
+                              <input 
+                                type="text" 
+                                class="w-full px-2 md:px-3 py-1.5 md:py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400"
+                                placeholder="Enter imgur URL..."
+                                data-tribute-index={tributeIndex}
+                                data-field="avatar"
+                              />
+                            </div>
 
-                          <div class="w-full">
-                            <input 
-                              type="text"
-                              value={tributes[tributeIndex].name}
-                              class="w-full px-2 md:px-3 py-1.5 md:py-2 bg-gray-700 border border-gray-600 rounded-lg text-center font-semibold text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400"
-                              placeholder="Enter name..."
-                              data-tribute-index={tributeIndex}
-                              data-field="name"
-                            />
-                          </div>
+                            <div class="w-full">
+                              <input 
+                                type="text"
+                                value={tribute.name}
+                                class="w-full px-2 md:px-3 py-1.5 md:py-2 bg-gray-700 border border-gray-600 rounded-lg text-center font-semibold text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400"
+                                placeholder="Enter name..."
+                                data-tribute-index={tributeIndex}
+                                data-field="name"
+                              />
+                            </div>
 
-                          <div class="w-full">
-                            <div class="gender-selector bg-gray-700 p-1 rounded-lg flex justify-center" data-tribute-index={tributeIndex}>
-                              <button 
-                                class={`gender-btn flex-1 px-3 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 ${tributes[tributeIndex].gender === 'Male' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
-                                data-gender="Male"
-                              >
-                                Male
-                              </button>
-                              <button 
-                                class={`gender-btn flex-1 px-3 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 ${tributes[tributeIndex].gender === 'Female' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
-                                data-gender="Female"
-                              >
-                                Female
-                              </button>
+                            <div class="w-full">
+                              <div class="gender-selector bg-gray-700 p-1 rounded-lg flex justify-center" data-tribute-index={tributeIndex}>
+                                <button 
+                                  class={`gender-btn flex-1 px-3 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 ${tribute.gender === 'Male' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
+                                  data-gender="Male"
+                                >
+                                  Male
+                                </button>
+                                <button 
+                                  class={`gender-btn flex-1 px-3 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 ${tribute.gender === 'Female' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
+                                  data-gender="Female"
+                                >
+                                  Female
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -149,13 +165,21 @@ document.querySelectorAll('input[data-field="avatar"]').forEach(input => {
     const tributeIndex = parseInt(target.dataset.tributeIndex || '0');
     const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
     
-    // 只在有新值时更新 avatar 字段
-    tributes[tributeIndex] = {
-      ...tributes[tributeIndex], // 保留现有的所有字段
-      avatar: target.value || tributes[tributeIndex].avatar
-    };
-    
-    localStorage.setItem('tributes', JSON.stringify(tributes));
+    const newAvatarUrl = target.value;
+    if (newAvatarUrl) {
+      // 更新localStorage
+      tributes[tributeIndex] = {
+        ...tributes[tributeIndex],
+        avatar: newAvatarUrl
+      };
+      localStorage.setItem('tributes', JSON.stringify(tributes));
+      
+      // 使用ID选择器直接更新图片
+      const imgElement = document.getElementById(`tribute-img-${tributeIndex}`);
+      if (imgElement) {
+        imgElement.src = newAvatarUrl;
+      }
+    }
   });
 });
 
