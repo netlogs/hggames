@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Sitemap
 Sitemap: https://www.hungergame.cc/sitemap-index.xml
