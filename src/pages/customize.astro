@@ -36,6 +36,17 @@ const initialTributes = JSON.stringify(tributes);
       <p class="text-gray-400 text-sm md:text-base leading-relaxed">
         click anywhere else to see the avatar update in real-time
       </p>
+      <div class="pt-2">
+        <p class="text-gray-400 text-sm md:text-base leading-relaxed">
+          Need help with adding custom avatars?
+        </p>
+        <a 
+          href="/blog/guide" 
+          class="inline-block text-primary hover:text-primary/80 text-sm md:text-base font-medium transition-colors"
+        >
+          Check out our guide here
+        </a>
+      </div>
     </div>
 
     <div class="max-w-6xl mx-auto">
@@ -165,8 +176,23 @@ document.querySelectorAll('input[data-field="avatar"]').forEach(input => {
     const tributeIndex = parseInt(target.dataset.tributeIndex || '0');
     const tributes = JSON.parse(localStorage.getItem('tributes') || '[]');
     
-    const newAvatarUrl = target.value;
+    let newAvatarUrl = target.value.trim();
+    
+    // 如果输入了URL，进行处理
     if (newAvatarUrl) {
+      // 转换imgur链接格式
+      if (newAvatarUrl.includes('imgur.com')) {
+        // 提取imgur ID
+        const imgurId = newAvatarUrl.split('/').pop()?.split('.')[0];
+        if (imgurId) {
+          // 构建新的直链URL
+          newAvatarUrl = `https://i.imgur.com/${imgurId}.png`;
+          
+          // 更新input的值为转换后的URL
+          target.value = newAvatarUrl;
+        }
+      }
+
       // 更新localStorage
       tributes[tributeIndex] = {
         ...tributes[tributeIndex],
@@ -174,7 +200,7 @@ document.querySelectorAll('input[data-field="avatar"]').forEach(input => {
       };
       localStorage.setItem('tributes', JSON.stringify(tributes));
       
-      // 使用ID选择器直接更新图片
+      // 更新图片显示
       const imgElement = document.getElementById(`tribute-img-${tributeIndex}`);
       if (imgElement) {
         imgElement.src = newAvatarUrl;
