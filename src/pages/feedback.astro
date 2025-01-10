@@ -1,0 +1,195 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Feedback - Hunger Games Simulator" description="Help us improve the Hunger Games Simulator by sharing your thoughts, suggestions, or reporting any issues you've encountered.">
+  <main class="container mx-auto px-4 py-8 pt-20 min-h-screen">
+    <div class="max-w-2xl mx-auto">
+      <!-- 页面标题 -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+          Feedback
+        </h1>
+        <p class="text-gray-400 text-sm md:text-base leading-relaxed">
+          Help us improve the Hunger Games Simulator by sharing your thoughts, suggestions, or reporting any issues you've encountered.
+        </p>
+      </div>
+
+      <!-- 反馈表单 -->
+      <div class="bg-gray-800/50 rounded-xl p-6 md:p-8 backdrop-blur-sm border border-white/10">
+        <form 
+          action="https://formspree.io/f/mnnnljvp" 
+          method="POST"
+          class="space-y-6"
+          id="feedbackForm"
+        >
+          <!-- 反馈类型 -->
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+              Feedback Type <span class="text-primary">*</span>
+            </label>
+            <select 
+              name="feedbackType"
+              required
+              class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+            >
+              <option value="">Select a type...</option>
+              <option value="suggestion">Suggestion</option>
+              <option value="bug">Bug Report</option>
+              <option value="feature">Feature Request</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <!-- 邮箱 -->
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="your@email.com (optional)"
+              class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary transition-colors placeholder:text-gray-500"
+            />
+            <p class="mt-1 text-xs text-gray-400">
+              Optional - If you want to receive our feedback response as soon as possible.
+            </p>
+          </div>
+
+          <!-- 消息内容 -->
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+              Message <span class="text-primary">*</span>
+            </label>
+            <textarea
+              name="message"
+              required
+              rows="4"
+              placeholder="Please describe your feedback in detail..."
+              class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary transition-colors placeholder:text-gray-500"
+            ></textarea>
+          </div>
+
+          <!-- 提交按钮 -->
+          <div class="pt-2">
+            <button
+              type="submit"
+              class="w-full sm:w-auto px-6 py-3 bg-primary hover:bg-primary/80 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+              id="submitButton"
+            >
+              <span>Send Feedback</span>
+              <!-- 加载动画 (默认隐藏) -->
+              <svg class="animate-spin h-5 w-5 text-white hidden" id="loadingIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 提交成功提示 (默认隐藏) -->
+      <div 
+        id="successMessage" 
+        class="hidden mt-6 p-4 bg-green-900/50 border border-green-500/50 rounded-lg"
+      >
+        <p class="text-green-400 text-center">
+          Thank you for your feedback! We'll review it carefully.
+        </p>
+      </div>
+
+      <!-- 提交失败提示 (默认隐藏) -->
+      <div 
+        id="errorMessage" 
+        class="hidden mt-6 p-4 bg-red-900/50 border border-red-500/50 rounded-lg"
+      >
+        <p class="text-red-400 text-center">
+          Sorry, there was an error submitting your feedback. Please try again.
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const form = document.getElementById('feedbackForm') as HTMLFormElement;
+  const submitButton = document.getElementById('submitButton');
+  const loadingIcon = document.getElementById('loadingIcon');
+  const successMessage = document.getElementById('successMessage');
+  const errorMessage = document.getElementById('errorMessage');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // 重置消息状态
+    successMessage.classList.add('hidden');
+    errorMessage.classList.add('hidden');
+    
+    // 显示加载状态
+    submitButton.setAttribute('disabled', 'true');
+    loadingIcon.classList.remove('hidden');
+    
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        // 显示成功消息
+        successMessage.classList.remove('hidden');
+        form.reset();
+        
+        // 3秒后隐藏成功消息
+        setTimeout(() => {
+          successMessage.classList.add('hidden');
+        }, 3000);
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (error) {
+      // 显示错误消息
+      errorMessage.classList.remove('hidden');
+    } finally {
+      // 恢复按钮状态
+      submitButton.removeAttribute('disabled');
+      loadingIcon.classList.add('hidden');
+    }
+  });
+</script>
+
+<style>
+  /* 禁用状态样式 */
+  button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  /* 表单元素聚焦时的过渡效果 */
+  input, textarea, select {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  /* 自定义滚动条 */
+  textarea::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  textarea::-webkit-scrollbar-track {
+    background: #374151;
+    border-radius: 4px;
+  }
+  
+  textarea::-webkit-scrollbar-thumb {
+    background: #4B5563;
+    border-radius: 4px;
+  }
+  
+  textarea::-webkit-scrollbar-thumb:hover {
+    background: #6B7280;
+  }
+</style> 
