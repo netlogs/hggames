@@ -12,7 +12,11 @@ const {
   description = "Experience the thrill of the Hunger Games through our advanced simulator. Create custom tributes, simulate battles, and witness epic survival stories unfold.",
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const pathname = Astro.url.pathname;
+const canonicalURL = new URL(
+  pathname === '/' ? pathname : pathname.replace(/\/$/, ''),
+  Astro.site
+).toString();
 ---
 
 <!doctype html>
