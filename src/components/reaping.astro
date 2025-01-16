@@ -40,14 +40,12 @@ const districts = Array(12).fill(null).map((_, i) => ({
 
   <div class="max-w-6xl mx-auto">
     {districts.map((district, index) => (
-      // 每3个district一行
       index % 3 === 0 && (
         <div class="mb-4 md:mb-8">
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {districts.slice(index, index + 3).map(d => (
               <div class="col-span-1 bg-secondary/20 p-4 md:p-6 rounded-lg">
-                <h2 class="text-xl md:text-2xl font-semibold text-center mb-3 md:mb-4">
-                  District {d.number}
+                <h2 class="district-title text-xl md:text-2xl font-semibold text-center mb-3 md:mb-4" aria-label={`${d.number}`}>
                 </h2>
                 <div class="grid grid-cols-2 gap-3 md:gap-4">
                   {d.tributes.map(tributeIndex => (
@@ -59,10 +57,9 @@ const districts = Array(12).fill(null).map((_, i) => ({
                         height="90"
                         class="w-16 h-16 md:w-24 md:h-24 rounded-full object-cover border-2 border-gray-200"
                       />
-                      <p class="font-semibold text-sm md:text-base text-center">
-                        {tributes[tributeIndex].name}
+                      <p class="tribute-name font-semibold text-sm md:text-base text-center" aria-label={tributes[tributeIndex].name}>
                       </p>
-                      <p class="text-green-500 text-xs md:text-sm">Alive</p>
+                      <p class="tribute-status text-xs md:text-sm" aria-label="Tribute is alive"></p>
                     </div>
                   ))}
                 </div>
@@ -76,10 +73,10 @@ const districts = Array(12).fill(null).map((_, i) => ({
 
   <div class="flex justify-center mt-6 md:mt-8">
     <button
-      class="w-full sm:w-auto px-6 md:px-8 py-2.5 md:py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg transition-colors"
       id="proceedButton"
+      aria-label="Proceed to next phase"
+      class="proceed-button w-full sm:w-auto px-6 md:px-8 py-2.5 md:py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg transition-colors"
     >
-      Proceed
     </button>
   </div>
 </main>
@@ -87,6 +84,36 @@ const districts = Array(12).fill(null).map((_, i) => ({
 <style>
   main {
     min-height: 100vh;
+  }
+  
+  /* District 标题 */
+  .district-title::before {
+    content: "District " attr(aria-label);
+  }
+  
+  /* Tribute 状态 */
+  .tribute-status {
+    color: rgb(34 197 94); /* text-green-500 */
+  }
+  .tribute-status::before {
+    content: "Alive";
+  }
+  
+  /* Proceed 按钮 */
+  .proceed-button::before {
+    content: "Proceed";
+  }
+  
+  /* 响应式调整 */
+  @media (max-width: 640px) {
+    .proceed-button::before {
+      content: "Next";
+    }
+  }
+  
+  /* Tribute 名字 */
+  .tribute-name::before {
+    content: attr(aria-label);
   }
 </style>
 
