@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Features from '../components/Features.astro';
+import FAQ from '../components/FAQ.astro';
 import { initializeGameData, tributes } from '../hunger/MainProcess';
 
 // 初始化游戏数据
@@ -13,6 +15,17 @@ const districts = Array(12).fill(null).map((_, i) => ({
 
 // 将初始数据序列化后注入
 const initialTributes = JSON.stringify(tributes);
+
+const faqs = [
+  {
+    question: "How to modify the avatar of tributes in the Hunger Games Simulator Custom?",
+    answer: "After entering the Imgur avatar URL, click anywhere else to see the avatar update in real-time"
+  },
+  {
+    question: "How I get the Imgur avatar URL?",
+    answer: "You can refer to the tutorial manual: <a href='https://www.hungergame.cc/blog/guide' class='text-blue-400 hover:underline'>How to add custom avatars in the Hunger Games Simulator Custom</a>"
+  }
+];
 ---
 
 <!-- 在 head 中注入初始数据 -->
@@ -23,7 +36,7 @@ const initialTributes = JSON.stringify(tributes);
     }
 </script>
 
-<Layout title="Customize Tributes">
+<Layout title="Hunger Games Simulator Custom" description="Customize your tributes for the Hunger Games simulator. Create your own tribute and see how they fare in the arena.">
   <main class="container mx-auto px-4 py-8 pt-20">
     <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 md:mb-6 text-white">
       Customize Tributes
@@ -67,9 +80,10 @@ const initialTributes = JSON.stringify(tributes);
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {districts.slice(index, index + 3).map(d => (
                 <div class="col-span-1">
-                  <h2 class="text-xl md:text-2xl font-semibold text-center mb-3 md:mb-4 text-white">
-                    District {d.number}
+                  <h2 class="district-title text-xl md:text-2xl font-semibold text-center mb-3 md:mb-4 text-white" 
+                      aria-label={`${d.number}`}>
                   </h2>
+                  
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                     {d.tributes.map(tributeIndex => {
                       const tribute = tributes[tributeIndex];
@@ -88,10 +102,11 @@ const initialTributes = JSON.stringify(tributes);
                             <div class="w-full">
                               <input 
                                 type="text" 
-                                class="w-full px-2 md:px-3 py-1.5 md:py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400"
-                                placeholder="Enter imgur URL..."
+                                class="avatar-input w-full px-2 md:px-3 py-1.5 md:py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm text-center text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                                 data-tribute-index={tributeIndex}
                                 data-field="avatar"
+                                aria-label="Enter imgur URL"
+                                placeholder="Enter imgurURL"
                               />
                             </div>
 
@@ -99,26 +114,26 @@ const initialTributes = JSON.stringify(tributes);
                               <input 
                                 type="text"
                                 value={tribute.name}
-                                class="w-full px-2 md:px-3 py-1.5 md:py-2 bg-gray-700 border border-gray-600 rounded-lg text-center font-semibold text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400"
-                                placeholder="Enter name..."
+                                class="name-input w-full px-2 md:px-3 py-1.5 md:py-2 bg-gray-700 border border-gray-600 rounded-lg text-center font-semibold text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                                 data-tribute-index={tributeIndex}
                                 data-field="name"
+                                aria-label="Enter name"
                               />
                             </div>
 
                             <div class="w-full">
                               <div class="gender-selector bg-gray-700 p-1 rounded-lg flex justify-center" data-tribute-index={tributeIndex}>
                                 <button 
-                                  class={`gender-btn flex-1 px-3 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 ${tribute.gender === 'Male' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
+                                  class={`gender-btn male-btn flex-1 px-3 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 ${tribute.gender === 'Male' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
                                   data-gender="Male"
+                                  aria-label="Select Male"
                                 >
-                                  Male
                                 </button>
                                 <button 
-                                  class={`gender-btn flex-1 px-3 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 ${tribute.gender === 'Female' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
+                                  class={`gender-btn female-btn flex-1 px-3 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 ${tribute.gender === 'Female' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-400 hover:text-gray-300'}`}
                                   data-gender="Female"
+                                  aria-label="Select Female"
                                 >
-                                  Female
                                 </button>
                               </div>
                             </div>
@@ -138,11 +153,13 @@ const initialTributes = JSON.stringify(tributes);
     <div class="mt-8 md:mt-12 mb-6 md:mb-8 text-center">
       <button
         id="proceedButton"
-        class="w-full sm:w-auto inline-block px-6 md:px-8 py-2.5 md:py-3 bg-primary hover:bg-primary/80 text-white font-bold rounded-lg transition-colors"
+        aria-label="Proceed to next phase"
+        class="proceed-button w-full sm:w-auto px-6 md:px-8 py-2.5 md:py-3 bg-primary hover:bg-primary/80 text-white font-bold rounded-lg transition-colors"
       >
-        Proceed
       </button>
     </div>
+  <Features />
+  <FAQ faqs={faqs} />
   </main>
 </Layout>
 
@@ -279,5 +296,40 @@ document.getElementById('proceedButton')?.addEventListener('click', async () => 
 
   .gender-btn {
     user-select: none;
+  }
+
+  /* District 标题 */
+  .district-title::before {
+    content: "District " attr(aria-label);
+  }
+  
+  /* 输入框 placeholder */
+  .avatar-input::placeholder {
+    content: "Enter imgur URL...";
+  }
+  
+  .name-input::placeholder {
+    content: "Enter name...";
+  }
+  
+  /* 性别按钮文本 */
+  .male-btn::before {
+    content: "Male";
+  }
+  
+  .female-btn::before {
+    content: "Female";
+  }
+  
+  /* Proceed 按钮 */
+  .proceed-button::before {
+    content: "Proceed";
+  }
+  
+  /* 响应式调整 */
+  @media (max-width: 640px) {
+    .proceed-button::before {
+      content: "Next";
+    }
   }
 </style>

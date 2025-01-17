@@ -4,11 +4,31 @@ import Features from '../components/Features.astro';
 import HowItWorks from '../components/HowItWorks.astro';
 import FAQ from '../components/FAQ.astro';
 import Reaping from '../components/reaping.astro';
+
+const faqs = [
+  {
+    question: "How many tributes can participate in a Hunger Games Simulator?",
+    answer: "You can add between 5 to 24 tributes in a single simulation. This flexibility allows you to create both intimate and grand-scale games."
+  },
+  {
+    question: "Can I customize tribute attributes?",
+    answer: "You can customize the content of the Hunger Games emulator and leave a message under my <a href='https://x.com/liarpzu' class='text-blue-400 hover:underline'>X/Twitter</a>, and I will update the relevant features as soon as possible."
+  },
+  {
+    question: "How long does a Hunger Games Simulator take?",
+    answer: "A simulation can be completed in just a few minutes, though you can adjust the pace and detail level of events to your preference."
+  },
+  {
+    question: "Can I save and share my Hunger Games Simulation results?",
+    answer: "Yes, each Hunger Games simulation generates a unique story that you can save and share with others, including detailed event logs and the victor's journey."
+  }
+];
+
 ---
 
 <Layout title="Hunger Games Simulator" description="A more modern Hunger Games simulation, adapted from Susan Collins' Hunger Games series of books">
     <Reaping />
   <Features />
   <HowItWorks />
-  <FAQ />
+  <FAQ faqs={faqs} />
 </Layout>
