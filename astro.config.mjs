@@ -4,6 +4,6 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://www.hungergame.cc',
+  site: 'https://hungergame.cc',
   integrations: [tailwind(), react(), sitemap()],
 });
